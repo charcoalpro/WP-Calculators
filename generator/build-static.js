@@ -203,6 +203,18 @@ function buildLandedCost() {
   var headTable = table(["Destination", "Goods (FOB)", "Landed to door", "$/kg", "Import duty"], headRows,
     { caption: "Landed cost of one " + T + " t container by destination (FOB basis, illustrative freight)", highlight: 0 });
 
+  // (a2) Ocean freight by destination for BOTH container sizes (live shipping data).
+  var fbc = C.freight_by_country || {};
+  var frRows = countries.filter(function (k) { return fbc[k]; }).map(function (k) {
+    var fb = fbc[k];
+    return [C.duty[k].label, F.money(fb.ft20), F.money(fb.ft40), fb.days != null ? fb.days + " days" : "—"];
+  });
+  var freightTable = frRows.length
+    ? table(["Destination", "20ft freight", "40ft freight", "Ocean transit"], frRows,
+        { caption: "Ocean freight from Semarang (Indonesia) by container size", highlight: 0,
+          foot: "Freight and transit reflect current shipping data. Coconut charcoal is weight-limited, so a 20ft (≈ 19 t) is often the effective unit, while a 40ft (≈ 25.5 t) carries more charcoal per dollar of freight." })
+    : "";
+
   // (b) Supplier invoice price by incoterm (this is what the incoterm actually changes)
   var incoRows = countries.map(function (k) {
     var r = lcFor(k, T);
@@ -237,6 +249,8 @@ function buildLandedCost() {
     ],
     sections: [
       headTable,
+      freightTable ? h2("Ocean freight by container size") : "",
+      freightTable,
       h2("Supplier price by incoterm"),
       incoTable,
       h2("Cost breakdown for one lane"),
