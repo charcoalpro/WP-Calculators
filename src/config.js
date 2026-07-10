@@ -1,7 +1,7 @@
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-07-10T10:15:57.337Z
+ *  Generated:   2026-07-10T11:35:06.565Z
  */
 (function (root, factory) {
   var cfg = factory();
@@ -152,48 +152,95 @@
       "inland_per_container": 300
     },
     "freight_per_container": {
-      "SRG-LAX": 3500,
+      "SRG-LAX": 8240,
       "SRG-NYC": 5500,
-      "SRG-HAM": 4500,
-      "SRG-FXT": 4500,
-      "SRG-JEA": 2500,
-      "SRG-JED": 3000,
-      "SRG-NSA": 1800,
-      "SRG-MER": 4000
+      "SRG-HAM": 2450,
+      "SRG-FXT": 3520,
+      "SRG-JEA": 4500,
+      "SRG-JED": 4450,
+      "SRG-NSA": 2560,
+      "SRG-MER": 5200
     },
     "transit_days": {
       "SRG-LAX": [
-        20,
-        30
+        52,
+        52
       ],
       "SRG-NYC": [
         30,
         45
       ],
       "SRG-HAM": [
-        35,
-        50
+        45,
+        45
       ],
       "SRG-FXT": [
-        35,
-        50
+        34,
+        34
       ],
       "SRG-JEA": [
-        12,
-        22
+        20,
+        20
       ],
       "SRG-JED": [
-        16,
-        28
+        25,
+        25
       ],
       "SRG-NSA": [
-        10,
-        18
+        26,
+        26
       ],
       "SRG-MER": [
-        25,
-        40
+        42,
+        42
       ]
+    },
+    "freight_by_country": {
+      "IN": {
+        "ft20": 2560,
+        "ft40": 2795,
+        "days": 26
+      },
+      "US": {
+        "ft20": 8240,
+        "ft40": 10300,
+        "days": 52
+      },
+      "TR": {
+        "ft20": 5200,
+        "ft40": 7800,
+        "days": 42
+      },
+      "UK": {
+        "ft20": 3520,
+        "ft40": 6355,
+        "days": 34
+      },
+      "SA": {
+        "ft20": 4450,
+        "ft40": 6250,
+        "days": 25
+      },
+      "AE": {
+        "ft20": 4500,
+        "ft40": 4800,
+        "days": 20
+      },
+      "CA": {
+        "ft20": 2425,
+        "ft40": 3035,
+        "days": 38
+      },
+      "AU": {
+        "ft20": 1500,
+        "ft40": 2520,
+        "days": 29
+      },
+      "DE": {
+        "ft20": 2450,
+        "ft40": 3850,
+        "days": 45
+      }
     },
     "routing_note": "Red Sea diversions (Cape of Good Hope routing) and Hormuz disruption can add 10-20+ days to EU/Gulf lanes. Treat as user-editable and date-stamp.",
     "ports": {
