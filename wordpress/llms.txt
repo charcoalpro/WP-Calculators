@@ -1,0 +1,21 @@
+# Charcoal.pro — wholesale coconut-shell shisha/hookah charcoal (Indonesia export, B2B)
+
+> Full-container (FCL) supply of coconut-shell shisha charcoal from Indonesia to global B2B buyers. MOQ is one full container (~18 t). HS code 4402.20. The tools below give the numbers importers and distributors actually search for.
+
+## Tools
+- [Container load calculator](/tools/container-load/): tonnes and master cartons per 20ft / 40ft / 40ft HC container.
+- [Landed cost calculator](/tools/landed-cost/): all-in cost to your door by destination country and incoterm.
+- [Reseller margin calculator](/tools/profit-margin/): margin vs markup, resale price and profit per container.
+- [Transit time estimator](/tools/transit-time/): ocean transit and full door-ready lead time from Indonesia.
+- [Volume price breaks](/tools/moq-pricing/): unit price and savings by order size.
+- [Incoterms comparison](/tools/incoterms/): who pays what under EXW / FOB / CIF / DDP.
+- [ROI & payback](/tools/roi-payback/): return per cycle, inventory turns and payback for a container.
+- [Spec comparison](/tools/spec-comparison/): premium vs standard benchmarks and how to read a COA.
+
+## Reference
+- [UN 1361 / dangerous-goods shipping](/guides/un-1361-dangerous-goods/): Class 4.2, IMDG SP 978, 14-day weathering.
+- [Charcoal export glossary](/glossary/)
+
+## Notes
+- Pricing, freight, transit and duty figures on the tools are illustrative industry ranges, not quotes; verify before relying on them.
+- The US–Indonesia tariff position and ocean freight are the most volatile inputs and are re-checked monthly.
