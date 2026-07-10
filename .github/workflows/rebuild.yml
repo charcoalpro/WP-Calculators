@@ -31,6 +31,7 @@ jobs:
           node generator/api-adapter.js --write
           node generator/build-static.js
           node generator/build-embedded.js
+          node generator/build-bundle.js
 
       - name: Publish the rebuilt blocks
         run: |
