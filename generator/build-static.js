@@ -589,6 +589,63 @@ function buildSpec() {
   });
 }
 
+/* =========================================================================
+ * 6.9 PACKAGING-PRICE
+ * ====================================================================== */
+function buildPackaging() {
+  var pk = C.packaging || { boxes: [] };
+  var boxes = pk.boxes || [];
+  var rate = pk.usd_rate || 16000;
+  function idr(x) { return "Rp " + F.num(Math.round(x)); }
+  function lowPrice(b) { return Math.min.apply(null, b.tiers.map(function (t) { return t.price; })); }
+
+  var rows = [];
+  boxes.forEach(function (b) {
+    b.tiers.slice().sort(function (a, c) { return a.qty - c.qty; }).forEach(function (t) {
+      rows.push([b.label, b.dims, F.num(t.qty) + "+", idr(t.price), F.money2(t.price / rate)]);
+    });
+  });
+  var tbl = rows.length
+    ? table(["Box", "Size", "Order qty", "Price / box", "≈ USD / box"], rows,
+        { caption: "Printed packaging price by box and order quantity (per box, IDR)", highlight: 0,
+          foot: "Per-box prices from current quotes. USD is an estimate at Rp " + F.num(rate) + "/USD. Custom printing, materials, tooling and lead time affect final pricing — request a quote." })
+    : p("No packaging quotes are available yet.");
+
+  var inner = boxes.filter(function (b) { return b.kind === "inner"; });
+  var master = boxes.filter(function (b) { return b.kind === "master"; });
+  var exI = inner[0], exM = master[0];
+  var lede = exI || exM
+    ? "Custom printed packaging for coconut shisha charcoal is priced per box and falls with order quantity. " +
+      (exI ? "Inner retail boxes run from about <strong>" + idr(lowPrice(exI)) + "</strong> per box (≈ " + F.money2(lowPrice(exI) / rate) + ") at volume. " : "") +
+      (exM ? "Master shipping cartons run from about <strong>" + idr(lowPrice(exM)) + "</strong> per box (≈ " + F.money2(lowPrice(exM) / rate) + ")." : "")
+    : "Custom printed packaging for coconut shisha charcoal is priced per box and falls with order quantity.";
+
+  var caps = [];
+  if (exI) caps.push("Custom printed inner boxes for coconut charcoal are about <strong>" + idr(lowPrice(exI)) + "</strong> per box (≈ " + F.money2(lowPrice(exI) / rate) + ") at volume (verified " + V + "; from current quotes).");
+  if (exM) caps.push("Printed master shipping cartons are about <strong>" + idr(lowPrice(exM)) + "</strong> per box (≈ " + F.money2(lowPrice(exM) / rate) + ") at volume (verified " + V + "; from current quotes).");
+  caps.push("Per-box packaging price falls as order quantity rises — the quantity price breaks are shown in the table above (verified " + V + ").");
+
+  var faq = [];
+  if (exI) faq.push({ q: "How much do custom printed inner boxes for coconut charcoal cost?", a: "From about <strong>" + idr(lowPrice(exI)) + "</strong> per box (≈ " + F.money2(lowPrice(exI) / rate) + ") at volume, with the exact price depending on size, material, printing and order quantity.", aPlain: "From about " + idr(lowPrice(exI)) + " per box at volume, depending on size, material, printing and quantity." });
+  faq.push({ q: "Does box price drop with larger orders?", a: "Yes — packaging is quoted per box and the per-box price falls as order quantity rises. Enter your quantity in the calculator to see the tier that applies.", aPlain: "Yes; per-box price falls as order quantity rises." });
+
+  return page({
+    slug: "packaging-price",
+    title: "Coconut Charcoal Packaging Price Calculator",
+    lede: lede,
+    capsules: caps,
+    sections: [
+      tbl,
+      h2("How packaging is priced"),
+      p("Printed inner boxes and master shipping cartons are quoted per box at a given order quantity. The per-box price falls as quantity rises because setup, plate/tooling and print-run costs spread across more units. Prices are in Indonesian rupiah (IDR); the USD column is an estimate at Rp " + F.num(rate) + "/USD."),
+      p("Final pricing depends on box size, board and paper grade, number of print colours, finishing and lead time. Use the calculator to estimate a per-box price and total for your quantity, then request a firm quote.")
+    ],
+    faq: faq,
+    widget: { name: "packaging-price", heading: "Estimate your packaging cost", note: "Pick a box and enter your order quantity to see the per-box price and total." },
+    dataset: { name: "Coconut charcoal packaging price by box and quantity", desc: "Per-box price of printed inner boxes and master shipping cartons for coconut shisha charcoal, by box configuration and order quantity, in IDR with a USD estimate." }
+  });
+}
+
 /* ---- write all ---------------------------------------------------------- */
 var BUILDS = {
   "container-load": buildContainerLoad,
@@ -598,7 +655,8 @@ var BUILDS = {
   "moq-pricing": buildMoq,
   "incoterms": buildIncoterms,
   "roi-payback": buildRoi,
-  "spec-comparison": buildSpec
+  "spec-comparison": buildSpec,
+  "packaging-price": buildPackaging
 };
 
 var wrote = [];

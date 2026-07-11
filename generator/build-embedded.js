@@ -35,7 +35,8 @@ var CALCS = [
   ["moq-pricing",     "Volume Pricing"],
   ["incoterms",       "Incoterms"],
   ["roi-payback",     "ROI & Payback"],
-  ["spec-comparison", "Spec Comparison"]
+  ["spec-comparison", "Spec Comparison"],
+  ["packaging-price", "Packaging Price"]
 ];
 
 function read(p) { return fs.readFileSync(p, "utf8"); }
