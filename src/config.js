@@ -1,7 +1,7 @@
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-07-10T11:50:40.674Z
+ *  Generated:   2026-07-11T05:13:02.675Z
  */
 (function (root, factory) {
   var cfg = factory();
@@ -241,6 +241,84 @@
         "ft40": 3850,
         "days": 45
       }
+    },
+    "packaging": {
+      "usd_rate": 16000,
+      "boxes": [
+        {
+          "id": "inner-bf4e65",
+          "kind": "inner",
+          "label": "Inner box 110x110x110 mm, duplex 310 gsm",
+          "dims": "110x110x110 mm",
+          "spec": "E flute, CMYK (4 colors), opp glossy",
+          "tiers": [
+            {
+              "qty": 2000,
+              "price": 2950
+            },
+            {
+              "qty": 10000,
+              "price": 1950
+            }
+          ]
+        },
+        {
+          "id": "inner-b7cf58",
+          "kind": "inner",
+          "label": "Inner box 110x110x110 mm, duplex 250 gsm",
+          "dims": "110x110x110 mm",
+          "spec": "E flute, CMYK (4 colors), opp glossy",
+          "tiers": [
+            {
+              "qty": 18750,
+              "price": 1825
+            }
+          ]
+        },
+        {
+          "id": "master-0582d9",
+          "kind": "master",
+          "label": "Master carton Cube 25, 217x164x415 mm",
+          "dims": "217x164x415 mm",
+          "spec": "Single wall (3 layers), K150/M125/K150, 1 color",
+          "tiers": [
+            {
+              "qty": 200,
+              "price": 6300
+            },
+            {
+              "qty": 2140,
+              "price": 6200
+            }
+          ]
+        },
+        {
+          "id": "master-5b8daf",
+          "kind": "master",
+          "label": "Master carton Cube 26, 230x233x565 mm",
+          "dims": "230x233x565 mm",
+          "spec": "Single wall (3 layers), Duplex 310 gsm B flute, 3 colors",
+          "tiers": [
+            {
+              "qty": 940,
+              "price": 19000
+            }
+          ]
+        },
+        {
+          "id": "master-425e7b",
+          "kind": "master",
+          "label": "Master carton Cube 26, 225x115x560 mm",
+          "dims": "225x115x560 mm",
+          "spec": "Single wall (3 layers), K150/M125/K150, 2 colors",
+          "tiers": [
+            {
+              "qty": 1940,
+              "price": 5900
+            }
+          ]
+        }
+      ]
     },
     "routing_note": "Red Sea diversions (Cape of Good Hope routing) and Hormuz disruption can add 10-20+ days to EU/Gulf lanes. Treat as user-editable and date-stamp.",
     "ports": {
