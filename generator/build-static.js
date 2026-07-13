@@ -198,7 +198,7 @@ function buildLandedCost() {
   // (a) Headline: country × [FOB goods, landed total, $/kg, duty]
   var headRows = countries.map(function (k) {
     var r = lcFor(k, T), duty = C.duty[k];
-    return [C.duty[k].label, F.money(r.fobTotal), F.money(r.totalLanded), F.money2(r.perKg), F.pct(duty.rate * 100, 0) + " " + duty.basis];
+    return [C.duty[k].label, F.money(r.fobTotal), F.money(r.totalLanded), F.money2(r.perKg), (duty.rate * 100 % 1 ? F.pct(duty.rate * 100, 1) : F.pct(duty.rate * 100, 0)) + " " + duty.basis];
   });
   var headTable = table(["Destination", "Goods (FOB)", "Landed to door", "$/kg", "Import duty"], headRows,
     { caption: "Landed cost of one " + T + " t container by destination (FOB basis, illustrative freight)", highlight: 0 });
