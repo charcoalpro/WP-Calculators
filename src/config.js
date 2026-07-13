@@ -1,7 +1,7 @@
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-07-13T03:16:14.760Z
+ *  Generated:   2026-07-13T03:33:15.769Z
  */
 (function (root, factory) {
   var cfg = factory();
@@ -242,6 +242,603 @@
         "days": 45
       }
     },
+    "transit_ports": [
+      {
+        "port": "Durres",
+        "country": "Albania",
+        "days": 60
+      },
+      {
+        "port": "Alger",
+        "country": "Algeria",
+        "days": 55
+      },
+      {
+        "port": "Algiers",
+        "country": "Algeria",
+        "days": 40
+      },
+      {
+        "port": "Melbourne",
+        "country": "Australia",
+        "days": 31
+      },
+      {
+        "port": "Sydney",
+        "country": "Australia",
+        "days": 29
+      },
+      {
+        "port": "Baku",
+        "country": "Azerbajan",
+        "days": 59
+      },
+      {
+        "port": "Khalifa Bin Salman",
+        "country": "Bahrain",
+        "days": 12
+      },
+      {
+        "port": "Antwerpen",
+        "country": "Belgium",
+        "days": 41
+      },
+      {
+        "port": "Santos",
+        "country": "Brazil",
+        "days": 55
+      },
+      {
+        "port": "Kribi",
+        "country": "Cameroon",
+        "days": 45
+      },
+      {
+        "port": "Montreal",
+        "country": "Canada",
+        "days": 57
+      },
+      {
+        "port": "Toronto",
+        "country": "Canada",
+        "days": 55
+      },
+      {
+        "port": "Vancouver",
+        "country": "Canada",
+        "days": 38
+      },
+      {
+        "port": "Qingdao",
+        "country": "China",
+        "days": 14
+      },
+      {
+        "port": "Shanghai",
+        "country": "China",
+        "days": 15
+      },
+      {
+        "port": "Tianjin",
+        "country": "China",
+        "days": 12
+      },
+      {
+        "port": "Xiamen",
+        "country": "China",
+        "days": 15
+      },
+      {
+        "port": "Xingang",
+        "country": "China",
+        "days": 10
+      },
+      {
+        "port": "Conakry",
+        "country": "Conakry",
+        "days": 55
+      },
+      {
+        "port": "Limassol",
+        "country": "Cyprus",
+        "days": 41
+      },
+      {
+        "port": "Copenhagen",
+        "country": "Denmark",
+        "days": 52
+      },
+      {
+        "port": "Alexandria",
+        "country": "Egypt",
+        "days": 39
+      },
+      {
+        "port": "Dekheila (Alexandria)",
+        "country": "Egypt",
+        "days": 42
+      },
+      {
+        "port": "Port Said West",
+        "country": "Egypt",
+        "days": 42
+      },
+      {
+        "port": "Sokhan",
+        "country": "Egypt",
+        "days": 35
+      },
+      {
+        "port": "Sokhna",
+        "country": "Egypt",
+        "days": 39
+      },
+      {
+        "port": "Suva",
+        "country": "Fiji",
+        "days": 50
+      },
+      {
+        "port": "Le Havre",
+        "country": "France",
+        "days": 35
+      },
+      {
+        "port": "Banjul",
+        "country": "Gambia",
+        "days": 65
+      },
+      {
+        "port": "Poti",
+        "country": "Georgia",
+        "days": 45
+      },
+      {
+        "port": "Bremerhaven",
+        "country": "Germany",
+        "days": 45
+      },
+      {
+        "port": "Hamburg",
+        "country": "Germany",
+        "days": 45
+      },
+      {
+        "port": "Tema",
+        "country": "Ghana",
+        "days": 69
+      },
+      {
+        "port": "Piraeus",
+        "country": "Greece",
+        "days": 45
+      },
+      {
+        "port": "Hong Kong",
+        "country": "Hong Kong",
+        "days": 10
+      },
+      {
+        "port": "Chennai",
+        "country": "India",
+        "days": 18
+      },
+      {
+        "port": "Jawaharlal Nehru Port (JNP)",
+        "country": "India",
+        "days": 18
+      },
+      {
+        "port": "Kolkata",
+        "country": "India",
+        "days": 26
+      },
+      {
+        "port": "Mumbai",
+        "country": "India",
+        "days": 18
+      },
+      {
+        "port": "Mundra",
+        "country": "India",
+        "days": 18
+      },
+      {
+        "port": "Nava Sheva",
+        "country": "India",
+        "days": 15
+      },
+      {
+        "port": "Bandar Abbas",
+        "country": "Iran",
+        "days": 15
+      },
+      {
+        "port": "Basra",
+        "country": "Iraq",
+        "days": 18
+      },
+      {
+        "port": "Umm Qasr",
+        "country": "Iraq",
+        "days": 17
+      },
+      {
+        "port": "Ashdod",
+        "country": "Israel (Palestine)",
+        "days": 35
+      },
+      {
+        "port": "Haifa",
+        "country": "Israel (Palestine)",
+        "days": 35
+      },
+      {
+        "port": "Genoa",
+        "country": "Italy",
+        "days": 35
+      },
+      {
+        "port": "Gioia Tauro",
+        "country": "Italy",
+        "days": 55
+      },
+      {
+        "port": "Abidjan",
+        "country": "Ivory Coast",
+        "days": 51
+      },
+      {
+        "port": "Tokyo",
+        "country": "Japan",
+        "days": 14
+      },
+      {
+        "port": "Aqaba",
+        "country": "Jordan",
+        "days": 53
+      },
+      {
+        "port": "Mombasa",
+        "country": "Kenya",
+        "days": 45
+      },
+      {
+        "port": "Busan",
+        "country": "Korea",
+        "days": 10
+      },
+      {
+        "port": "Incheon",
+        "country": "Korea",
+        "days": 17
+      },
+      {
+        "port": "Shuwaikh",
+        "country": "Kuwait",
+        "days": 20
+      },
+      {
+        "port": "Apapa",
+        "country": "Lagos",
+        "days": 60
+      },
+      {
+        "port": "Beirut",
+        "country": "Lebanon",
+        "days": 42
+      },
+      {
+        "port": "Benghazi",
+        "country": "Libya",
+        "days": 39
+      },
+      {
+        "port": "Misrata",
+        "country": "Libya",
+        "days": 38
+      },
+      {
+        "port": "Tripoli",
+        "country": "Libya",
+        "days": 55
+      },
+      {
+        "port": "Klaipeda",
+        "country": "Lithuania",
+        "days": 55
+      },
+      {
+        "port": "Port Klang",
+        "country": "Malaysia",
+        "days": 5
+      },
+      {
+        "port": "Male",
+        "country": "Maldives",
+        "days": 28
+      },
+      {
+        "port": "Casablanca",
+        "country": "Morocco",
+        "days": 47
+      },
+      {
+        "port": "Kathamandu",
+        "country": "Nepal",
+        "days": 45
+      },
+      {
+        "port": "Amsterdam",
+        "country": "Netherlands (Holland)",
+        "days": 42
+      },
+      {
+        "port": "Rotterdam",
+        "country": "Netherlands (Holland)",
+        "days": 37
+      },
+      {
+        "port": "Tauranga",
+        "country": "New Zealand",
+        "days": 20
+      },
+      {
+        "port": "Auckland",
+        "country": "New Zeland",
+        "days": 28
+      },
+      {
+        "port": "Salalah",
+        "country": "Oman",
+        "days": 17
+      },
+      {
+        "port": "Sohar",
+        "country": "Oman",
+        "days": 38
+      },
+      {
+        "port": "Karachi",
+        "country": "Pakistan",
+        "days": 14
+      },
+      {
+        "port": "Asuncion",
+        "country": "Paraguay",
+        "days": 77
+      },
+      {
+        "port": "Callao",
+        "country": "Peru",
+        "days": 51
+      },
+      {
+        "port": "Gdynia",
+        "country": "Poland",
+        "days": 48
+      },
+      {
+        "port": "Lisbon",
+        "country": "Portugal",
+        "days": 30
+      },
+      {
+        "port": "Sines",
+        "country": "Portugal",
+        "days": 39
+      },
+      {
+        "port": "Dohar",
+        "country": "Qatar",
+        "days": 15
+      },
+      {
+        "port": "Hamad",
+        "country": "Qatar",
+        "days": 15
+      },
+      {
+        "port": "Hammad",
+        "country": "Qatar",
+        "days": 22
+      },
+      {
+        "port": "Constanca",
+        "country": "Romania",
+        "days": 56
+      },
+      {
+        "port": "Constanta",
+        "country": "Romania",
+        "days": 44
+      },
+      {
+        "port": "Novorossiysk",
+        "country": "Russia",
+        "days": 48
+      },
+      {
+        "port": "Saint Petersburg",
+        "country": "Russia",
+        "days": 45
+      },
+      {
+        "port": "Vladivostok",
+        "country": "Russia",
+        "days": 18
+      },
+      {
+        "port": "Dammam",
+        "country": "Saudi Arabia (KSA)",
+        "days": 18
+      },
+      {
+        "port": "King Abdullah",
+        "country": "Saudi Arabia (KSA)",
+        "days": 43
+      },
+      {
+        "port": "Riyadh",
+        "country": "Saudi Arabia (KSA)",
+        "days": 36
+      },
+      {
+        "port": "Jeddah",
+        "country": "Saudi Arabia",
+        "days": 25
+      },
+      {
+        "port": "Dakar",
+        "country": "Senegal",
+        "days": 35
+      },
+      {
+        "port": "Durban",
+        "country": "South Africa",
+        "days": 35
+      },
+      {
+        "port": "Barcelona",
+        "country": "Spain",
+        "days": 37
+      },
+      {
+        "port": "Valencia",
+        "country": "Spain",
+        "days": 55
+      },
+      {
+        "port": "Latakia",
+        "country": "Syria",
+        "days": 55
+      },
+      {
+        "port": "Keelung",
+        "country": "Taiwan",
+        "days": 14
+      },
+      {
+        "port": "Rades",
+        "country": "Tunis",
+        "days": 65
+      },
+      {
+        "port": "Ambarli",
+        "country": "Turkey",
+        "days": 50
+      },
+      {
+        "port": "Iskenderum",
+        "country": "Turkey",
+        "days": 42
+      },
+      {
+        "port": "Istanbul",
+        "country": "Turkey",
+        "days": 35
+      },
+      {
+        "port": "Izmir",
+        "country": "Turkey",
+        "days": 42
+      },
+      {
+        "port": "Mersin",
+        "country": "Turkey",
+        "days": 35
+      },
+      {
+        "port": "Port of Long Beach (USA)",
+        "country": "USA",
+        "days": 41
+      },
+      {
+        "port": "Fujairah",
+        "country": "United Arab Emirates (UAE)",
+        "days": 20
+      },
+      {
+        "port": "Jebel Ali",
+        "country": "United Arab Emirates (UAE)",
+        "days": 14
+      },
+      {
+        "port": "Felixstowe",
+        "country": "United Kingdom (UK)",
+        "days": 39
+      },
+      {
+        "port": "Glasgow",
+        "country": "United Kingdom (UK)",
+        "days": 39
+      },
+      {
+        "port": "London",
+        "country": "United Kingdom (UK)",
+        "days": 43
+      },
+      {
+        "port": "Manchester",
+        "country": "United Kingdom (UK)",
+        "days": 48
+      },
+      {
+        "port": "Southampton",
+        "country": "United Kingdom (UK)",
+        "days": 34
+      },
+      {
+        "port": "Houston",
+        "country": "United States (USA)",
+        "days": 52
+      },
+      {
+        "port": "Jacksonville",
+        "country": "United States (USA)",
+        "days": 57
+      },
+      {
+        "port": "New Orleans",
+        "country": "United States (USA)",
+        "days": 83
+      },
+      {
+        "port": "New York",
+        "country": "United States (USA)",
+        "days": 40
+      },
+      {
+        "port": "Norfolk",
+        "country": "United States (USA)",
+        "days": 42
+      },
+      {
+        "port": "Savanah USA",
+        "country": "United States (USA)",
+        "days": 56
+      },
+      {
+        "port": "Tacoma",
+        "country": "United States (USA)",
+        "days": 45
+      },
+      {
+        "port": "Tanpa Bay",
+        "country": "United States (USA)",
+        "days": 57
+      },
+      {
+        "port": "Aden",
+        "country": "Yemen",
+        "days": 33
+      },
+      {
+        "port": "Hodeidah",
+        "country": "Yemen",
+        "days": 25
+      }
+    ],
     "packaging": {
       "usd_rate": 16000,
       "boxes": [
