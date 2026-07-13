@@ -62,7 +62,9 @@ function renderConfigJs(cfg) {
   console.log("Fetching " + API_URL + "/config" + (API_TOKEN ? " (authorised)" : " (no token set!)"));
   var cfg;
   try {
-    var res = await fetch(API_URL + "/config", { headers: { "X-API-Key": API_TOKEN, "Accept": "application/json" } });
+    // Cache-buster: the API is fronted by LiteSpeed on a WordPress host; without a
+    // unique query string a stale/partial /config can be served, failing validation.
+    var res = await fetch(API_URL + "/config?_cb=" + Date.now(), { headers: { "X-API-Key": API_TOKEN, "Accept": "application/json" } });
     if (!res.ok) throw new Error("HTTP " + res.status + " " + res.statusText);
     cfg = await res.json();
   } catch (e) {
