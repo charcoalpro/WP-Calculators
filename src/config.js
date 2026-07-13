@@ -1,7 +1,7 @@
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-07-13T03:06:28.801Z
+ *  Generated:   2026-07-13T03:16:14.760Z
  */
 (function (root, factory) {
   var cfg = factory();
@@ -10,7 +10,7 @@
 })(typeof self !== "undefined" ? self : this, function () {
   return {
     "meta": {
-      "verified": "2026-06",
+      "verified": "2026-07-15",
       "currency": "USD",
       "hs_code": "4402.20",
       "data_is_dummy": true
