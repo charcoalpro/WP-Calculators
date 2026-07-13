@@ -22,7 +22,22 @@ var F = require("../src/formulas.js");
 var OUT = path.join(__dirname, "..", "dist", "static");
 fs.mkdirSync(OUT, { recursive: true });
 
-var V = C.meta.verified;                 // "YYYY-MM" freshness stamp
+// "Last verified" stamp, stored as "YYYY-MM" or full "YYYY-MM-DD".
+// V = human display ("15 July 2026" / "June 2026"); VISO = valid ISO for JSON-LD.
+function humanVerified(v) {
+  var m = String(v).match(/^(\d{4})-(\d{2})(?:-(\d{2}))?$/);
+  if (!m) return String(v);
+  var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  var mon = months[parseInt(m[2], 10) - 1] || m[2];
+  return m[3] ? (parseInt(m[3], 10) + " " + mon + " " + m[1]) : (mon + " " + m[1]);
+}
+function isoVerified(v) {
+  var m = String(v).match(/^(\d{4})-(\d{2})(?:-(\d{2}))?$/);
+  return m ? (m[1] + "-" + m[2] + "-" + (m[3] || "01")) : String(v);
+}
+var VRAW = C.meta.verified;              // raw stored value
+var V = humanVerified(VRAW);             // e.g. "15 July 2026"
+var VISO = isoVerified(VRAW);            // e.g. "2026-07-15" (JSON-LD dateModified)
 var A = C.author;
 var COUNTRY_LANE = { US: "SRG-LAX", DE: "SRG-HAM", UK: "SRG-FXT", SA: "SRG-JED", IN: "SRG-NSA", TR: "SRG-MER", AE: "SRG-JEA", CA: "SRG-LAX", AU: "SRG-LAX" };
 
@@ -78,14 +93,14 @@ function schema(o) {
     })(),
     { "@type": "WebPage", url: "https://charcoal.pro/tools/" + o.slug + "/", name: o.title,
       author: { "@id": personId }, reviewedBy: { "@id": personId }, publisher: { "@id": orgId },
-      dateModified: V + "-01" },
+      dateModified: VISO },
     { "@type": "FAQPage", mainEntity: o.faq.map(function (q) {
       return { "@type": "Question", name: q.q, acceptedAnswer: { "@type": "Answer", text: q.aPlain || q.q } };
     }) }
   ];
   if (o.dataset) {
     graph.push({ "@type": "Dataset", name: o.dataset.name, description: o.dataset.desc,
-      creator: { "@id": orgId }, dateModified: V + "-01",
+      creator: { "@id": orgId }, dateModified: VISO,
       isAccessibleForFree: true, license: "https://creativecommons.org/licenses/by/4.0/" });
   }
   var doc = { "@context": "https://schema.org", "@graph": graph };
