@@ -132,6 +132,7 @@ function page(o) {
 function h2(t) { return "<h2 class=\"ccx-h\">" + esc(t) + "</h2>"; }
 function h3(t) { return "<h3 class=\"ccx-h\">" + esc(t) + "</h3>"; }
 function p(html) { return "<p>" + html + "</p>"; }
+function rng(a, b) { return a === b ? a + " days" : a + "–" + b + " days"; }
 
 /* =========================================================================
  * 6.1 CONTAINER-LOAD
@@ -346,25 +347,27 @@ function buildProfitMargin() {
  * 6.4 TRANSIT-TIME
  * ====================================================================== */
 function buildTransit() {
-  var destKeys = Object.keys(C.ports.dest);
-  var laneLAX = C.transit_days["SRG-LAX"];
+  // Destination ports + ocean days: live from the shipping database (every port), with the
+  // curated lanes as a fallback. LA / Long Beach is the reference lane for the narrative.
+  var tports = (C.transit_ports && C.transit_ports.length) ? C.transit_ports : null;
+  var laRef = tports ? tports.filter(function (p) { return /long beach|los angeles/i.test(p.port); })[0] : null;
+  var laneLAX = laRef ? [laRef.days, laRef.days] : (C.transit_days["SRG-LAX"] || [20, 30]);
   var rLAX = F.transitTime(laneLAX, C.leadtime, false);
 
-  // (a) ocean days SRG → each dest
-  var oceanRows = destKeys.map(function (k) {
-    var lane = C.transit_days["SRG-" + k];
-    return [C.ports.dest[k], lane[0] + "\u2013" + lane[1] + " days"];
-  });
-  var oceanTable = table(["Destination port (from Semarang)", "Ocean transit"], oceanRows,
-    { caption: "Ocean transit time, Semarang (Indonesia) \u2192 destination", highlight: 0,
-      foot: "Red Sea diversions (Cape of Good Hope routing) and Hormuz disruption can add 10\u201320+ days to Europe and Gulf lanes. Ranges are illustrative and date-sensitive." });
+  // (a) ocean days from Indonesia to each destination port
+  var oceanRows = tports
+    ? tports.map(function (p) { return [esc(p.port) + (p.country ? " (" + esc(p.country) + ")" : ""), p.days + " days"]; })
+    : Object.keys(C.ports.dest).map(function (k) { var lane = C.transit_days["SRG-" + k]; return [C.ports.dest[k], lane[0] + "\u2013" + lane[1] + " days"]; });
+  var oceanTable = table(["Destination port (from Indonesia)", "Ocean transit"], oceanRows,
+    { caption: "Ocean transit time, Indonesia \u2192 destination port", highlight: 0,
+      foot: "Ocean days are the latest from current shipping data; Red Sea / Hormuz diversions can add 10\u201320+ days to Europe and Gulf lanes." });
 
   // (b) full lead-time breakdown SRG-LAX
   var L = C.leadtime;
   var ltRows = [
     ["Weathering (mandatory, pre-packing)", L.weathering_days + " days"],
     ["Production", L.production_days[0] + "\u2013" + L.production_days[1] + " days"],
-    ["Ocean transit (Semarang \u2192 Los Angeles)", laneLAX[0] + "\u2013" + laneLAX[1] + " days"],
+    ["Ocean transit (Semarang \u2192 Los Angeles)", rng(laneLAX[0], laneLAX[1])],
     ["Destination clearance", L.clearance_days[0] + "\u2013" + L.clearance_days[1] + " days"],
     ["<strong>Door-ready total</strong>", "<strong>" + rLAX.totalLow + "\u2013" + rLAX.totalHigh + " days</strong>"]
   ];
@@ -396,7 +399,7 @@ function buildTransit() {
       { q: "Why does charcoal need a 14-day weathering period?", a: "Freshly produced charcoal can self-heat, so UN 1361 (Class 4.2) cargo must weather for 14 days before packing under IMDG Special Provision 978. It is a safety requirement that sits ahead of ocean transit in the timeline.", aPlain: "Freshly made charcoal self-heats; UN 1361 requires 14 days of weathering before packing under IMDG SP 978." }
     ],
     widget: { name: "transit-time", heading: "Estimate your transit and lead time", note: "Pick your ports and whether custom OEM print is needed." },
-    dataset: { name: "Indonesia coconut charcoal ocean transit times", desc: "Illustrative ocean transit ranges from Semarang, Indonesia to eight destination ports, plus a full door-ready lead-time breakdown." }
+    dataset: { name: "Indonesia coconut charcoal ocean transit times", desc: "Ocean transit days from Indonesia to every published destination port, plus a full door-ready lead-time breakdown." }
   });
 }
 
