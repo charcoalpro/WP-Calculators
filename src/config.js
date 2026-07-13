@@ -1,7 +1,7 @@
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-07-12T07:56:07.028Z
+ *  Generated:   2026-07-13T03:02:30.313Z
  */
 (function (root, factory) {
   var cfg = factory();
@@ -77,7 +77,7 @@
         "rate": 0,
         "basis": "FOB",
         "label": "United States",
-        "note": "HS4402.20 duty-free per CBP N306942. VERIFY current Section 122 / reciprocal surcharge on Indonesian origin — HIGHLY VOLATILE.",
+        "note": "Base rate duty-free (HS 4402.20; CBP N306942). HOWEVER a ~10% US Section 122 surcharge applies to Indonesian-origin goods as of Jul 2026, expiring ~24 Jul 2026 (IEEPA reciprocal tariffs struck down by SCOTUS 20 Feb 2026). Re-verify current rate with a customs broker -- HIGHLY VOLATILE.",
         "clearance": 350,
         "inland": 300
       },
@@ -130,10 +130,10 @@
         "inland": 300
       },
       "CA": {
-        "rate": 0,
+        "rate": 0.065,
         "basis": "FOB",
         "label": "Canada",
-        "note": "VERIFY.",
+        "note": "MFN 6.5% on HS 4402.20.90 (shisha/BBQ cube charcoal). Duty-free only under Canada GPT if Indonesia is GPT-eligible with valid origin docs -- verify before quoting.",
         "clearance": 350,
         "inland": 300
       },
