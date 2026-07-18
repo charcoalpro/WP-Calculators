@@ -558,19 +558,19 @@ function buildRoi() {
  * 6.8 SPEC-COMPARISON
  * ====================================================================== */
 function buildSpec() {
-  // ponytail: these are our fixed product grades (marketing spec), not DB-driven
-  // nightly numbers, so they live here as static data. If they should ever be
-  // editable from the admin/DB, add a `grades` block to config + api-adapter.
-  // Columns: [attribute, Platinum, Super Premium, Premium, why it matters].
-  var specRows = [
-    ["Ash content",           "1.6\u20131.9%", "1.9\u20132.2%", "1.9\u20132.5%", "Lower ash means cleaner burning and less residue in the bowl."],
-    ["Moisture (after oven)", "3\u20134%",     "4\u20135%",     "5\u20136%",     "Low moisture straight after drying lights faster and burns hotter."],
-    ["Moisture (on packing)", "4\u20138%",     "5\u20138%",     "6\u20138%",     "Moisture at packing shows how dry the coals stay through storage and transit."],
-    ["Smell",                 "No smell",      "No smell",      "No smell",      "An odourless coal keeps the shisha flavour clean."],
-    ["Smoke",                 "No smoke",      "No smoke",      "No smoke",      "No smoke means a clean, low-odour light-up."]
-  ];
-  var tbl = table(["Attribute", "Platinum", "Super Premium", "Premium", "Why it matters"], specRows,
-    { caption: "Coconut shisha charcoal grades \u2014 Platinum vs Super Premium vs Premium", highlight: 0,
+  // Grades come from the shared source in formulas.js (F.SPEC_ROWS / F.SPEC_GRADES) \u2014
+  // the same data the widget grades against, so this table and the widget can
+  // never disagree. Columns: [attribute, ...grades, why it matters].
+  function cell(row, gi) {
+    if (row.text) return row.text[gi];
+    var b = row.band[gi];
+    return (b[0] === b[1] ? b[0] : b[0] + "\u2013" + b[1]) + row.unit;
+  }
+  var specRows = F.SPEC_ROWS.map(function (row) {
+    return [row.label].concat(F.SPEC_GRADES.map(function (_g, gi) { return cell(row, gi); })).concat([row.why]);
+  });
+  var tbl = table(["Attribute"].concat(F.SPEC_GRADES).concat(["Why it matters"]), specRows,
+    { caption: "Coconut shisha charcoal grades \u2014 " + F.SPEC_GRADES.join(" vs "), highlight: 0,
       foot: "Typical quality ranges per grade. Confirm against this exporter's published Certificate of Analysis (COA) and burn-test data." });
 
   return page({
@@ -593,7 +593,7 @@ function buildSpec() {
       { q: "Do all grades burn with no smell and no smoke?", a: "Yes. Platinum, Super Premium and Premium are all produced to burn with no smell and no smoke once fully lit.", aPlain: "Yes \u2014 all three grades are no smell and no smoke once lit." },
       { q: "Why are there two moisture figures?", a: "One is measured straight after oven-drying and the other on packing. The on-packing figure (4\u20138%) is higher because the coals reabsorb a little moisture before they ship.", aPlain: "One is after oven-drying, one at packing; the on-packing figure is higher because coals reabsorb some moisture before shipping." }
     ],
-    widget: { name: "spec-comparison", heading: "Compare your current charcoal", note: "Enter your supplier's COA figures to see where each attribute lands." },
+    widget: { name: "spec-comparison", heading: "Check your charcoal against our grades", note: "Enter your ash and moisture to see which grade it matches." },
     dataset: { name: "Coconut shisha charcoal grade specifications", desc: "Grade ranges for Platinum, Super Premium and Premium coconut shisha charcoal \u2014 ash content and moisture (after oven and on packing), plus no-smell and no-smoke guarantees." }
   });
 }

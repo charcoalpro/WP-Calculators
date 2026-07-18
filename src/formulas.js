@@ -195,43 +195,39 @@
     };
   }
 
-  /* ---- 6.8 Spec-Comparison ---------------------------------------------- */
-  // For each field, compare a user value against premium/standard thresholds.
-  // "max" fields (lower is better): ash, moisture, drop-test.
-  // "min" fields (higher is better): fixed carbon, burn time, density.
-  var SPEC_FIELDS = [
-    { key: "ash_max_pct",          label: "Ash content",   unit: "%",   dir: "max" },
-    { key: "moisture_max_pct",     label: "Moisture",      unit: "%",   dir: "max" },
-    { key: "fixed_carbon_min_pct", label: "Fixed carbon",  unit: "%",   dir: "min" },
-    { key: "burn_min_minutes",     label: "Burn time",     unit: " min",dir: "min" },
-    { key: "density_min",          label: "Density",       unit: " g/cc",dir: "min" },
-    { key: "drop_test_max_pct",    label: "Drop-test loss",unit: "%",   dir: "max" }
+  /* ---- 6.8 Spec-Comparison — product grades -----------------------------
+   * Single source for our three coconut-charcoal grades, read by BOTH the static
+   * table (generator/build-static.js) and the browser widget so the two layers
+   * can never disagree. Graded rows carry a per-grade [lo, hi] % band (lower is
+   * better); the widget grades a user value by the first grade whose hi it meets.
+   * Non-graded rows (smell, smoke) are guarantees shown in the table only. */
+  var SPEC_GRADES = ["Platinum", "Super Premium", "Premium"];
+  var SPEC_ROWS = [
+    { label: "Ash content", unit: "%", grade: true,
+      band: [[1.6, 1.9], [1.9, 2.2], [1.9, 2.5]],
+      why: "Lower ash means cleaner burning and less residue in the bowl." },
+    { label: "Moisture (after oven)", unit: "%", grade: true,
+      band: [[3, 4], [4, 5], [5, 6]],
+      why: "Low moisture straight after drying lights faster and burns hotter." },
+    { label: "Moisture (on packing)", unit: "%", grade: false,
+      band: [[4, 8], [5, 8], [6, 8]],
+      why: "Moisture at packing shows how dry the coals stay through storage and transit." },
+    { label: "Smell", grade: false, text: ["No smell", "No smell", "No smell"],
+      why: "An odourless coal keeps the shisha flavour clean." },
+    { label: "Smoke", grade: false, text: ["No smoke", "No smoke", "No smoke"],
+      why: "No smoke means a clean, low-odour light-up." }
   ];
 
-  function classifyField(value, premium, standard, dir) {
-    if (value == null || isNaN(value)) return "unknown";
-    if (dir === "max") {
-      if (value <= premium) return "premium";
-      if (value <= standard) return "standard";
-      return "below";
-    } else {
-      if (value >= premium) return "premium";
-      if (value >= standard) return "standard";
-      return "below";
-    }
+  // Grade one user value against a graded row: index of the first grade whose
+  // upper bound it meets (0 = best), SPEC_GRADES.length if it exceeds every
+  // grade, or -1 if not entered. Lower is better.
+  function gradeValue(v, row) {
+    if (!(v > 0) || !row || !row.grade) return -1;
+    for (var i = 0; i < row.band.length; i++) if (v <= row.band[i][1]) return i;
+    return SPEC_GRADES.length;
   }
-
-  function specCompare(userSpecs, premium, standard) {
-    return SPEC_FIELDS.map(function (f) {
-      var v = userSpecs ? userSpecs[f.key] : null;
-      return {
-        key: f.key, label: f.label, unit: f.unit, dir: f.dir,
-        value: v,
-        premium: premium[f.key],
-        standard: standard[f.key],
-        status: classifyField(v, premium[f.key], standard[f.key], f.dir)
-      };
-    });
+  function gradeName(i) {
+    return i < 0 ? "—" : (i >= SPEC_GRADES.length ? "below Premium" : SPEC_GRADES[i]);
   }
 
   return {
@@ -243,8 +239,10 @@
     priceBreaks: priceBreaks,
     incoterms: incoterms,
     roiPayback: roiPayback,
-    specCompare: specCompare,
+    gradeValue: gradeValue,
+    gradeName: gradeName,
     INCOTERM_STAGES: INCOTERM_STAGES,
-    SPEC_FIELDS: SPEC_FIELDS
+    SPEC_GRADES: SPEC_GRADES,
+    SPEC_ROWS: SPEC_ROWS
   };
 });
