@@ -558,52 +558,43 @@ function buildRoi() {
  * 6.8 SPEC-COMPARISON
  * ====================================================================== */
 function buildSpec() {
-  var pr = C.specs.premium, st = C.specs.standard;
-  var why = {
-    ash_max_pct: "Lower ash means cleaner burning and less residue in the bowl.",
-    moisture_max_pct: "Lower moisture lights faster and avoids steam and popping.",
-    fixed_carbon_min_pct: "Higher fixed carbon means more heat and longer, more consistent burn.",
-    burn_min_minutes: "Longer burn time means fewer coal changes per session.",
-    density_min: "Denser cubes hold shape and burn evenly without crumbling.",
-    drop_test_max_pct: "Lower drop-test loss means less breakage in transit and handling."
-  };
-  var fmt = { ash_max_pct: "%", moisture_max_pct: "%", fixed_carbon_min_pct: "%", burn_min_minutes: " min", density_min: " g/cc", drop_test_max_pct: "%" };
-  var dir = { ash_max_pct: "\u2264", moisture_max_pct: "\u2264", fixed_carbon_min_pct: "\u2265", burn_min_minutes: "\u2265", density_min: "\u2265", drop_test_max_pct: "\u2264" };
-  var labels = { ash_max_pct: "Ash content", moisture_max_pct: "Moisture", fixed_carbon_min_pct: "Fixed carbon", burn_min_minutes: "Burn time", density_min: "Density", drop_test_max_pct: "Drop-test loss" };
-  var keys = ["ash_max_pct", "moisture_max_pct", "fixed_carbon_min_pct", "burn_min_minutes", "density_min", "drop_test_max_pct"];
-
-  var rows = keys.map(function (k) {
-    return [labels[k], dir[k] + " " + pr[k] + fmt[k], dir[k] + " " + st[k] + fmt[k], why[k]];
-  });
-  var tbl = table(["Attribute", "Premium", "Standard", "Why it matters"], rows,
-    { caption: "Coconut shisha charcoal spec benchmark \u2014 premium vs standard grade", highlight: 0,
-      foot: "Typical quality ranges. Confirm against this exporter's published Certificate of Analysis (COA) and burn-test data." });
+  // ponytail: these are our fixed product grades (marketing spec), not DB-driven
+  // nightly numbers, so they live here as static data. If they should ever be
+  // editable from the admin/DB, add a `grades` block to config + api-adapter.
+  // Columns: [attribute, Platinum, Super Premium, Premium, why it matters].
+  var specRows = [
+    ["Ash content",           "1.6\u20131.9%", "1.9\u20132.2%", "1.9\u20132.5%", "Lower ash means cleaner burning and less residue in the bowl."],
+    ["Moisture (after oven)", "3\u20134%",     "4\u20135%",     "5\u20136%",     "Low moisture straight after drying lights faster and burns hotter."],
+    ["Moisture (on packing)", "4\u20138%",     "5\u20138%",     "6\u20138%",     "Moisture at packing shows how dry the coals stay through storage and transit."],
+    ["Smell",                 "No smell",      "No smell",      "No smell",      "An odourless coal keeps the shisha flavour clean."],
+    ["Smoke",                 "No smoke",      "No smoke",      "No smoke",      "No smoke means a clean, low-odour light-up."]
+  ];
+  var tbl = table(["Attribute", "Platinum", "Super Premium", "Premium", "Why it matters"], specRows,
+    { caption: "Coconut shisha charcoal grades \u2014 Platinum vs Super Premium vs Premium", highlight: 0,
+      foot: "Typical quality ranges per grade. Confirm against this exporter's published Certificate of Analysis (COA) and burn-test data." });
 
   return page({
     slug: "spec-comparison",
-    title: "Coconut Shisha Charcoal Spec Guide (Premium vs Standard)",
-    lede: "Premium coconut shisha charcoal typically has ash content below <strong>" + pr.ash_max_pct + "%</strong>, fixed carbon above <strong>" +
-      pr.fixed_carbon_min_pct + "%</strong>, moisture under <strong>" + pr.moisture_max_pct + "%</strong>, and a burn time of <strong>" +
-      pr.burn_min_minutes + "+ minutes</strong>. Ash above about " + st.ash_max_pct + "% or fixed carbon below about " + st.fixed_carbon_min_pct +
-      "% generally signals standard rather than premium grade.",
+    title: "Coconut Shisha Charcoal Grades \u2014 Platinum, Super Premium & Premium",
+    lede: "Our coconut shisha charcoal comes in three grades \u2014 <strong>Platinum</strong>, <strong>Super Premium</strong> and <strong>Premium</strong> \u2014 separated mainly by ash content and moisture. Platinum runs the lowest ash at <strong>1.6\u20131.9%</strong> and the driest cores (<strong>3\u20134%</strong> moisture after oven); Super Premium sits at <strong>1.9\u20132.2%</strong> ash; Premium at <strong>1.9\u20132.5%</strong>. Every grade burns with <strong>no smell and no smoke</strong>.",
     capsules: [
-      "Premium coconut shisha charcoal typically has ash content below <strong>" + pr.ash_max_pct + "%</strong>, fixed carbon above <strong>" + pr.fixed_carbon_min_pct + "%</strong>, moisture under <strong>" + pr.moisture_max_pct + "%</strong>, and a burn time of <strong>" + pr.burn_min_minutes + "+ minutes</strong> (verified " + V + ").",
-      "Ash content above ~" + st.ash_max_pct + "% and fixed carbon below ~" + st.fixed_carbon_min_pct + "% generally indicate standard rather than premium coconut charcoal (verified " + V + ").",
-      "On a Certificate of Analysis, the attributes that most separate premium from standard are ash, fixed carbon, moisture and burn time (verified " + V + ")."
+      "Platinum coconut shisha charcoal has the lowest ash content at 1.6\u20131.9% and 3\u20134% moisture after oven (verified " + V + ").",
+      "All three grades \u2014 Platinum, Super Premium and Premium \u2014 burn with no smell and no smoke (verified " + V + ").",
+      "Grades are separated by ash content and moisture; on-packing moisture runs 4\u20138% across grades (verified " + V + ")."
     ],
     sections: [
       tbl,
-      h2("How to read a coconut charcoal COA"),
-      p("A Certificate of Analysis (COA) reports the lab-measured properties of a batch. Read four numbers first: ash content (lower is better \u2014 premium is \u2264" + pr.ash_max_pct + "%), fixed carbon (higher is better \u2014 premium is \u2265" + pr.fixed_carbon_min_pct + "%), moisture (\u2264" + pr.moisture_max_pct + "% premium), and burn time (\u2265" + pr.burn_min_minutes + " minutes premium). Density and drop-test loss indicate how well the cubes survive shipping and hold shape."),
-      p("Watch for figures reported on a different basis (as-received vs dry) and for missing attributes \u2014 a COA that omits ash or fixed carbon is a flag. The strongest signal of quality is a supplier's own repeatable burn-test data published alongside the COA. Benchmarks here are typical ranges; confirm them against this exporter's actual COA.")
+      h2("How the three grades differ"),
+      p("The grades share the same coconut-shell base and differ mainly in two lab figures: ash content and moisture. Ash is lowest on Platinum (1.6\u20131.9%), a little higher on Super Premium (1.9\u20132.2%) and Premium (1.9\u20132.5%) \u2014 lower ash means a cleaner burn and less residue in the bowl."),
+      p("Moisture is reported twice: straight after oven-drying (3\u20136% depending on grade) and again on packing (4\u20138%), which reflects how the coals settle before they ship. Every grade is produced to be no smell and no smoke once fully lit.")
     ],
     faq: [
-      { q: "What ash content is good for shisha charcoal?", a: "Premium coconut shisha charcoal has ash content below about " + pr.ash_max_pct + "%. Above roughly " + st.ash_max_pct + "% is standard grade and leaves more residue in the bowl.", aPlain: "Below about " + pr.ash_max_pct + "% is premium; above about " + st.ash_max_pct + "% is standard grade." },
-      { q: "What fixed carbon should premium hookah charcoal have?", a: "Premium coconut charcoal has fixed carbon above about " + pr.fixed_carbon_min_pct + "%, which drives heat output and burn length. Below about " + st.fixed_carbon_min_pct + "% is standard grade.", aPlain: "Above about " + pr.fixed_carbon_min_pct + "% fixed carbon is premium; below about " + st.fixed_carbon_min_pct + "% is standard." },
-      { q: "How can I tell premium from standard coconut charcoal?", a: "Compare four COA numbers: ash (\u2264" + pr.ash_max_pct + "% premium), fixed carbon (\u2265" + pr.fixed_carbon_min_pct + "% premium), moisture (\u2264" + pr.moisture_max_pct + "% premium) and burn time (\u2265" + pr.burn_min_minutes + " min premium). Repeatable burn-test data is the strongest quality signal.", aPlain: "Compare ash, fixed carbon, moisture and burn time on the COA against premium thresholds, and look for burn-test data." }
+      { q: "What is the difference between Platinum, Super Premium and Premium charcoal?", a: "Mainly ash content and moisture. Platinum has the lowest ash (1.6\u20131.9%) and driest cores (3\u20134% after oven), Super Premium is 1.9\u20132.2% ash, and Premium is 1.9\u20132.5%. All three are no smell and no smoke.", aPlain: "Platinum has the lowest ash (1.6\u20131.9%) and moisture; Super Premium is 1.9\u20132.2% ash; Premium is 1.9\u20132.5%. All three are no smell, no smoke." },
+      { q: "Do all grades burn with no smell and no smoke?", a: "Yes. Platinum, Super Premium and Premium are all produced to burn with no smell and no smoke once fully lit.", aPlain: "Yes \u2014 all three grades are no smell and no smoke once lit." },
+      { q: "Why are there two moisture figures?", a: "One is measured straight after oven-drying and the other on packing. The on-packing figure (4\u20138%) is higher because the coals reabsorb a little moisture before they ship.", aPlain: "One is after oven-drying, one at packing; the on-packing figure is higher because coals reabsorb some moisture before shipping." }
     ],
     widget: { name: "spec-comparison", heading: "Compare your current charcoal", note: "Enter your supplier's COA figures to see where each attribute lands." },
-    dataset: { name: "Coconut shisha charcoal quality benchmarks", desc: "Premium vs standard benchmark ranges for ash, moisture, fixed carbon, burn time, density and drop-test loss, with why each matters." }
+    dataset: { name: "Coconut shisha charcoal grade specifications", desc: "Grade ranges for Platinum, Super Premium and Premium coconut shisha charcoal \u2014 ash content and moisture (after oven and on packing), plus no-smell and no-smoke guarantees." }
   });
 }
 
