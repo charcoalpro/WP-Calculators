@@ -32,7 +32,9 @@ var FILES = [
   "widgets/incoterms.js",
   "widgets/roi-payback.js",
   "widgets/spec-comparison.js",
-  "widgets/packaging-price.js"
+  "widgets/packaging-price.js",
+  "widgets/production-cost.js",
+  "widgets/price-check.js"
 ];
 
 var stamp = new Date().toISOString();

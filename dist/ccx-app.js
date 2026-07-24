@@ -1,4 +1,4 @@
-/*! CCX ccx-app.js — external widget bundle. Generated 2026-07-23T08:08:08.000Z. Do NOT hand-edit. */
+/*! CCX ccx-app.js — external widget bundle. Generated 2026-07-24T05:28:37.757Z. Do NOT hand-edit. */
 /* ---- config.js ---- */
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
@@ -1243,6 +1243,99 @@
     return i < 0 ? "—" : (i >= SPEC_GRADES.length ? "below Premium" : SPEC_GRADES[i]);
   }
 
+  /* ---- 6.10/6.11 Factory production cost & price-to-grade ----------------
+   * The cost model behind the "Cost of Production for Shisha Charcoal" article
+   * (its Excel, reproduced to the cent). Cost lines are Rp per kg of FINISHED
+   * charcoal. Lines with scales_with_loss are multiplied — together with the
+   * raw-material price — by (1 + loss%), the spreadsheet's 1.25-coefficient
+   * convention. Margin is a markup on cost: price = cost × (1 + margin).
+   * config.factory (DB-driven, admin-editable) overrides; DEFAULT_FACTORY is
+   * the seed so both calculators work before the API carries the block. */
+  var DEFAULT_FACTORY = {
+    fx_idr: 17000,                 // Rp per USD
+    raw_idr_per_kg: 13500,         // carbonized shell at factory gate
+    margin_pct: 25,                // factory margin, % on cost
+    loss_pct: 25,                  // material loss in production (calc 1)
+    grade_loss_pct: [35, 25, 20],  // per grade, SPEC_GRADES order
+    pack_inner_usd_t: 120,         // inner boxes adder, USD/t
+    pack_master_usd_t: 60,         // colour master box adder, USD/t
+    costs: [
+      { item: "discharge",        label: "Unloading from truck",     idr_per_kg: 50,   section: "production", scales_with_loss: 1 },
+      { item: "tapioca",          label: "Tapioca binder",           idr_per_kg: 616,  section: "production", scales_with_loss: 0 },
+      { item: "oven",             label: "Oven drying (wood-pellet)",idr_per_kg: 200,  section: "production", scales_with_loss: 0 },
+      { item: "labor",            label: "Production wages",         idr_per_kg: 1850, section: "production", scales_with_loss: 0 },
+      { item: "stuffing",         label: "Container stuffing",       idr_per_kg: 50,   section: "production", scales_with_loss: 0 },
+      { item: "electricity",      label: "Electricity",              idr_per_kg: 500,  section: "production", scales_with_loss: 0 },
+      { item: "maintenance",      label: "Maintenance",              idr_per_kg: 350,  section: "production", scales_with_loss: 0 },
+      { item: "office",           label: "Office & misc",            idr_per_kg: 750,  section: "production", scales_with_loss: 0 },
+      { item: "inner_plastic",    label: "Inner plastic bag",        idr_per_kg: 300,  section: "packaging",  scales_with_loss: 0 },
+      { item: "tk_inner_plastic", label: "Labour — inner plastic",   idr_per_kg: 300,  section: "packaging",  scales_with_loss: 0 },
+      { item: "inner_box",        label: "Inner box",                idr_per_kg: 1825, section: "packaging",  scales_with_loss: 0 },
+      { item: "tk_inner_box",     label: "Labour — inner box",       idr_per_kg: 150,  section: "packaging",  scales_with_loss: 0 },
+      { item: "master_box",       label: "Master box",               idr_per_kg: 650,  section: "packaging",  scales_with_loss: 0 },
+      { item: "tk_master_box",    label: "Labour — master box",      idr_per_kg: 100,  section: "packaging",  scales_with_loss: 0 },
+      { item: "sticker",          label: "Sticker",                  idr_per_kg: 105,  section: "packaging",  scales_with_loss: 0 },
+      { item: "silica",           label: "Silica gel",               idr_per_kg: 50,   section: "packaging",  scales_with_loss: 0 }
+    ]
+  };
+
+  function factoryModel(cfg) {
+    var f = cfg && cfg.factory;
+    return (f && f.costs && f.costs.length) ? f : DEFAULT_FACTORY;
+  }
+
+  // Per-kg IDR cost split at a given raw price and loss %.
+  function factoryCost(fa, rawIdr, lossPct) {
+    var scaled = rawIdr, fixed = 0, pack = 0;
+    (fa.costs || []).forEach(function (c) {
+      if (c.scales_with_loss) scaled += c.idr_per_kg;
+      else if (c.section === "packaging") pack += c.idr_per_kg;
+      else fixed += c.idr_per_kg;
+    });
+    var prodIdr = scaled * (1 + lossPct / 100) + fixed;
+    return { prodIdr: prodIdr, packIdr: pack, totalIdr: prodIdr + pack };
+  }
+
+  // Calc 1: full stack incl. packaging → USD/t cost, selling price and profit.
+  function factoryPrice(fa, rawIdr, fx, marginPct) {
+    var c = factoryCost(fa, rawIdr, fa.loss_pct);
+    var perT = 1000 / fx;
+    var costT = c.totalIdr * perT;
+    return {
+      costIdrKg: c.totalIdr,
+      prodT: c.prodIdr * perT,
+      packT: c.packIdr * perT,
+      costT: costT,
+      priceT: costT * (1 + marginPct / 100),
+      profitT: costT * (marginPct / 100)
+    };
+  }
+
+  // Calc 2: a grade's standard price — BULK production cost (no packaging lines)
+  // at that grade's loss %, plus margin, plus flat USD adders when included.
+  function gradePriceT(fa, gi, addInner, addMaster) {
+    var c = factoryCost(fa, fa.raw_idr_per_kg, fa.grade_loss_pct[gi]);
+    var bulk = (c.prodIdr / fa.fx_idr) * 1000 * (1 + fa.margin_pct / 100);
+    return bulk + (addInner ? fa.pack_inner_usd_t : 0) + (addMaster ? fa.pack_master_usd_t : 0);
+  }
+
+  // Which grade standard is a quoted price closest to? ±5% beyond the ladder's
+  // ends flags "suspiciously cheap" / "above Platinum".
+  function priceGrade(fa, offerT, addInner, addMaster) {
+    var prices = SPEC_GRADES.map(function (_g, i) { return gradePriceT(fa, i, addInner, addMaster); });
+    var nearest = 0;
+    for (var i = 1; i < prices.length; i++) {
+      if (Math.abs(offerT - prices[i]) < Math.abs(offerT - prices[nearest])) nearest = i;
+    }
+    return {
+      prices: prices,
+      nearest: nearest,
+      delta: offerT - prices[nearest],
+      tooLow: offerT < prices[prices.length - 1] * 0.95,
+      aboveTop: offerT > prices[0] * 1.05
+    };
+  }
+
   return {
     money: money, money2: money2, num: num, pct: pct,
     containerLoad: containerLoad,
@@ -1254,6 +1347,11 @@
     roiPayback: roiPayback,
     gradeValue: gradeValue,
     gradeName: gradeName,
+    factoryModel: factoryModel,
+    factoryCost: factoryCost,
+    factoryPrice: factoryPrice,
+    gradePriceT: gradePriceT,
+    priceGrade: priceGrade,
     INCOTERM_STAGES: INCOTERM_STAGES,
     SPEC_GRADES: SPEC_GRADES,
     SPEC_ROWS: SPEC_ROWS
@@ -1923,6 +2021,90 @@
               ? "Below the smallest quoted quantity (" + F.num(res.smallest.qty) + " boxes) — showing that tier's price."
               : (res.next ? "Ordering " + F.num(res.next.qty) + "+ boxes drops the price to " + idr(res.next.price) + "/box." : null),
             disclaimer: "Per-box prices are in IDR from current quotes; USD is an estimate at the rate shown. Printing, materials, tooling and lead time affect final pricing — request a quote."
+          };
+        }
+      });
+    });
+  });
+})();
+
+;
+/* ---- widgets/production-cost.js ---- */
+/* CCX widget · 6.10 Factory Production Cost & Profit */
+(function () {
+  var CCX = window.CCX; if (!CCX || !CCX.util) return;
+  var U = CCX.util, C = CCX.config, F = CCX.formulas;
+
+  U.ready(function () {
+    U.mountAll("production-cost", function (mount) {
+      var FA = F.factoryModel(C);
+      U.build(mount, {
+        title: "Model the factory's cost and profit",
+        sub: "Raw material, exchange rate and margin are the levers; fixed costs (tapioca, oven, wages, electricity, packaging) come from our factory model.",
+        fields: [
+          { type: "number", id: "pc-raw", label: "Raw material (Rp/kg)", value: FA.raw_idr_per_kg, min: 0, step: 100 },
+          { type: "number", id: "pc-fx", label: "Exchange rate (Rp/USD)", value: FA.fx_idr, min: 1, step: 100 },
+          { type: "number", id: "pc-margin", label: "Factory margin (% on cost)", value: FA.margin_pct, min: 0, max: 60, step: 1 }
+        ],
+        params: { "pc-raw": "raw", "pc-fx": "fx", "pc-margin": "m" },
+        compute: function () {
+          var raw = U.numval("pc-raw"), fx = U.numval("pc-fx") || 1, m = U.numval("pc-margin");
+          var r = F.factoryPrice(FA, raw, fx, m);
+          return {
+            headline: F.money(r.priceT) + "/t",
+            headlineSmall: "factory selling price at " + F.pct(m, 0) + " margin",
+            lines: [
+              { label: "Production cost (incl. " + F.pct(FA.loss_pct, 0) + " material loss)", value: F.money(r.prodT) + "/t" },
+              { label: "Packaging (boxes, plastic, stickers)", value: F.money(r.packT) + "/t" },
+              { label: "Total factory cost", value: F.money(r.costT) + "/t · Rp " + F.num(r.costIdrKg) + "/kg" },
+              { label: "Factory profit (EBITDA)", value: F.money(r.profitT) + "/t" }
+            ],
+            flag: "Profit is EBITDA before tax — and 5–10% of production typically fails and must be remade, so real net is lower.",
+            disclaimer: "Fixed costs from our Magelang factory model. Illustrative, not a quote."
+          };
+        }
+      });
+    });
+  });
+})();
+
+;
+/* ---- widgets/price-check.js ---- */
+/* CCX widget · 6.11 Price-to-Grade Check — which grade does a quoted $/t buy? */
+(function () {
+  var CCX = window.CCX; if (!CCX || !CCX.util) return;
+  var U = CCX.util, C = CCX.config, F = CCX.formulas;
+
+  U.ready(function () {
+    U.mountAll("price-check", function (mount) {
+      var FA = F.factoryModel(C);
+      var losses = F.SPEC_GRADES.map(function (g, i) { return g + " " + F.pct(FA.grade_loss_pct[i], 0); }).join(" / ");
+      U.build(mount, {
+        title: "Check what your price should buy",
+        sub: "Assumes raw material Rp " + F.num(FA.raw_idr_per_kg) + "/kg, Rp " + F.num(FA.fx_idr) + "/USD, " +
+          F.pct(FA.margin_pct, 0) + " factory margin; material loss " + losses + ".",
+        fields: [
+          { type: "number", id: "pg-price", label: "Offered price (USD/t)", value: 1500, min: 0, step: 10 },
+          { type: "checkbox", id: "pg-inner", label: "Price includes inner boxes (+" + F.money(FA.pack_inner_usd_t) + "/t)", value: false },
+          { type: "checkbox", id: "pg-master", label: "Price includes colour-printed master box (+" + F.money(FA.pack_master_usd_t) + "/t)", value: false }
+        ],
+        params: { "pg-price": "p", "pg-inner": "ib", "pg-master": "mb" },
+        compute: function () {
+          var offer = U.numval("pg-price"), ib = U.checked("pg-inner"), mb = U.checked("pg-master");
+          var r = F.priceGrade(FA, offer, ib, mb);
+          var lines = F.SPEC_GRADES.map(function (g, i) {
+            return { label: g + " standard (" + F.pct(FA.grade_loss_pct[i], 0) + " loss)", value: F.money(r.prices[i]) + "/t" };
+          });
+          lines.push({ label: "Your price vs " + F.SPEC_GRADES[r.nearest] + " standard", value: (r.delta >= 0 ? "+" : "−") + F.money(Math.abs(r.delta)) + "/t" });
+          var flag = null;
+          if (r.tooLow) flag = "More than 5% below the Premium standard — at this price genuine coconut briquette is unlikely: expect mixed material, chemical binders or short weight.";
+          else if (r.aboveTop) flag = "More than 5% above the Platinum standard — either premium extras are included, or there is room to negotiate.";
+          return {
+            headline: F.SPEC_GRADES[r.nearest],
+            headlineSmall: "is the grade standard closest to this price",
+            lines: lines,
+            flag: flag,
+            disclaimer: "Standards computed from our production-cost model at the assumptions above. Illustrative — confirm the actual grade with a COA and burn test."
           };
         }
       });

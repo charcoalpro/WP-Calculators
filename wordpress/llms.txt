@@ -11,6 +11,8 @@
 - [Incoterms comparison](/tools/incoterms/): who pays what under EXW / FOB / CIF / DDP.
 - [ROI & payback](/tools/roi-payback/): return per cycle, inventory turns and payback for a container.
 - [Spec comparison](/tools/spec-comparison/): premium vs standard benchmarks and how to read a COA.
+- [Production cost & factory profit](/tools/production-cost/): what one ton costs to make and what the factory earns, by raw-material price, exchange rate and margin.
+- [Price-to-grade check](/tools/price-check/): whether a quoted USD/t matches the Platinum, Super Premium or Premium standard.
 
 ## Reference
 - [UN 1361 / dangerous-goods shipping](/guides/un-1361-dangerous-goods/): Class 4.2, IMDG SP 978, 14-day weathering.

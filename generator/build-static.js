@@ -655,6 +655,133 @@ function buildPackaging() {
   });
 }
 
+/* =========================================================================
+ * 6.10 PRODUCTION-COST — factory cost & profit (the "Cost of Production" model)
+ * ====================================================================== */
+function buildProductionCost() {
+  var FA = F.factoryModel(C);
+  var d = F.factoryPrice(FA, FA.raw_idr_per_kg, FA.fx_idr, FA.margin_pct);
+  function idr(x) { return "Rp " + F.num(Math.round(x)); }
+  function usdT(idrPerKg) { return idrPerKg / FA.fx_idr * 1000; }
+  var lossX = 1 + FA.loss_pct / 100;
+
+  // (a) Full cost breakdown — the citable "what it really costs" table.
+  var prodRows = [], packRows = [];
+  var rawIdr = FA.raw_idr_per_kg * lossX;
+  prodRows.push(["Raw material — carbonized coconut shell (" + idr(FA.raw_idr_per_kg) + "/kg + " + F.pct(FA.loss_pct, 0) + " production loss)", idr(rawIdr), F.money(usdT(rawIdr))]);
+  FA.costs.forEach(function (c) {
+    var v = c.scales_with_loss ? c.idr_per_kg * lossX : c.idr_per_kg;
+    var label = c.label + (c.scales_with_loss ? " (+ " + F.pct(FA.loss_pct, 0) + " loss)" : "");
+    (c.section === "packaging" ? packRows : prodRows).push([label, idr(v), F.money(usdT(v))]);
+  });
+  prodRows.push(["<strong>Production subtotal</strong>", "<strong>" + idr(d.costIdrKg - (d.packT * FA.fx_idr / 1000)) + "</strong>", "<strong>" + F.money(d.prodT) + "</strong>"]);
+  packRows.push(["<strong>Packaging subtotal</strong>", "<strong>" + idr(d.packT * FA.fx_idr / 1000) + "</strong>", "<strong>" + F.money(d.packT) + "</strong>"]);
+  var totalRows = prodRows.concat(packRows).concat([
+    ["<strong>Total factory cost</strong>", "<strong>" + idr(d.costIdrKg) + "</strong>", "<strong>" + F.money(d.costT) + "</strong>"],
+    ["Factory margin (" + F.pct(FA.margin_pct, 0) + " on cost)", "—", F.money(d.profitT)],
+    ["<strong>Factory selling price</strong>", "—", "<strong>" + F.money(d.priceT) + "</strong>"]
+  ]);
+  var brkTable = table(["Cost line", "Rp / kg finished", "≈ USD / t"], totalRows,
+    { caption: "What one ton of shisha charcoal costs to produce (raw material " + idr(FA.raw_idr_per_kg) + "/kg, Rp " + F.num(FA.fx_idr) + "/USD)",
+      foot: "Per-kg costs of finished charcoal. Raw material and truck unloading carry the " + F.pct(FA.loss_pct, 0) + " material lost in cleaning, grinding and drying — you buy more shell than you sell as briquette." });
+
+  // (b) Selling price + (c) factory profit matrices: raw price rows × margin cols.
+  var base = FA.raw_idr_per_kg;
+  var raws = [-1500, 0, 1500, 3500].map(function (o) { return Math.round((base + o) / 500) * 500; });
+  var margins = [10, 15, 20, 25];
+  function matrix(field) {
+    return raws.map(function (rw) {
+      return [idr(rw) + "/kg"].concat(margins.map(function (m) {
+        return F.money(F.factoryPrice(FA, rw, FA.fx_idr, m)[field]);
+      }));
+    });
+  }
+  var cols = ["Raw material"].concat(margins.map(function (m) { return m + "% margin"; }));
+  var priceTable = table(cols, matrix("priceT"),
+    { caption: "Factory selling price (USD/t) by raw-material price and margin", highlight: raws.indexOf(base),
+      foot: "At Rp " + F.num(FA.fx_idr) + "/USD, packaging included. Margin applied as a markup on cost." });
+  var profitTable = table(cols, matrix("profitT"),
+    { caption: "What the factory keeps per ton (USD, EBITDA before tax)", highlight: raws.indexOf(base),
+      foot: "EBITDA, not net income — 5–10% of production typically fails and must be remanufactured." });
+
+  var rawShare = rawIdr / d.costIdrKg * 100;
+
+  return page({
+    slug: "production-cost",
+    title: "Shisha Charcoal Production Cost & Factory Profit Calculator",
+    lede: "Producing one ton of export-grade coconut shisha charcoal costs about <strong>" + F.money(d.costT) +
+      "</strong> (" + idr(d.costIdrKg) + "/kg) at " + idr(FA.raw_idr_per_kg) + "/kg raw material and Rp " + F.num(FA.fx_idr) +
+      "/USD. At a " + F.pct(FA.margin_pct, 0) + " margin the factory sells at about <strong>" + F.money(d.priceT) +
+      "/t</strong> and keeps roughly <strong>" + F.money(d.profitT) + "/t</strong> before tax.",
+    capsules: [
+      "Producing one ton of export-grade coconut shisha charcoal costs about <strong>" + F.money(d.costT) + "</strong> (" + idr(d.costIdrKg) + "/kg) at " + idr(FA.raw_idr_per_kg) + "/kg raw material (verified " + V + "; factory model).",
+      "At a " + F.pct(FA.margin_pct, 0) + " margin the factory selling price is about <strong>" + F.money(d.priceT) + "/t</strong>, of which roughly <strong>" + F.money(d.profitT) + "/t</strong> is factory EBITDA (verified " + V + ").",
+      "Raw material is about <strong>" + F.pct(rawShare, 0) + "</strong> of total factory cost once the " + F.pct(FA.loss_pct, 0) + " production material loss is counted (verified " + V + ")."
+    ],
+    sections: [
+      brkTable,
+      h2("Selling price by raw-material price and margin"),
+      priceTable,
+      h2("What the factory actually keeps"),
+      profitTable,
+      h2("How this is calculated"),
+      p("Every input is bought in Indonesian rupiah, so the model works per kg of finished charcoal in IDR and converts to USD per ton at the end. Raw material and truck unloading are multiplied by " + F.num(lossX, 2) + " because " + F.pct(FA.loss_pct, 0) + " of the material is lost to rotary cleaning, grinding, extrusion waste and drying. Fixed lines — tapioca binder, oven fuel, wages, container stuffing, electricity, maintenance and office — are added per kg, then retail packaging (inner plastic, printed inner boxes, master carton, stickers, silica gel and their labour)."),
+      p("The margin is a markup on cost: selling price = cost × (1 + margin). What the factory keeps is EBITDA before tax; 5–10% of production typically fails QC and is remanufactured, and equipment financing sits outside this model. Cleaner grades lose more material — see the price-to-grade check for how loss changes the standard price per grade.")
+    ],
+    faq: [
+      { q: "How much does it cost to produce shisha charcoal?", a: "About <strong>" + F.money(d.costT) + " per ton</strong> (" + idr(d.costIdrKg) + "/kg) all-in at the factory — raw material at " + idr(FA.raw_idr_per_kg) + "/kg including the " + F.pct(FA.loss_pct, 0) + " production loss, plus binder, fuel, wages, electricity and retail packaging.", aPlain: "About " + F.money(d.costT) + " per ton (" + idr(d.costIdrKg) + "/kg) all-in, including the " + F.pct(FA.loss_pct, 0) + " material loss and packaging." },
+      { q: "How much profit does a shisha charcoal factory make per ton?", a: "At a " + F.pct(FA.margin_pct, 0) + " margin on cost, about <strong>" + F.money(d.profitT) + " per ton</strong> EBITDA before tax. Across common margins the range is roughly " + F.money(F.factoryPrice(FA, base, FA.fx_idr, 10).profitT) + "–" + F.money(F.factoryPrice(FA, base, FA.fx_idr, 25).profitT) + "/t — and 5–10% of production fails and is remade.", aPlain: "About " + F.money(d.profitT) + " per ton EBITDA at a " + F.pct(FA.margin_pct, 0) + " margin; roughly " + F.money(F.factoryPrice(FA, base, FA.fx_idr, 10).profitT) + "–" + F.money(F.factoryPrice(FA, base, FA.fx_idr, 25).profitT) + " across common margins." },
+      { q: "Why does the raw-material price matter so much?", a: "Carbonized coconut shell is about " + F.pct(rawShare, 0) + " of total factory cost, and every kilogram of finished charcoal needs " + F.num(lossX, 2) + " kg of it because of the " + F.pct(FA.loss_pct, 0) + " production loss. A Rp 1,500/kg move in raw material shifts the selling price by roughly " + F.money(F.factoryPrice(FA, base + 1500, FA.fx_idr, FA.margin_pct).priceT - d.priceT) + "/t.", aPlain: "Raw material is about " + F.pct(rawShare, 0) + " of factory cost, and each finished kg needs " + F.num(lossX, 2) + " kg of shell." }
+    ],
+    widget: { name: "production-cost", heading: "Run the factory model yourself", note: "Change the raw-material price, exchange rate and margin to see cost, price and profit." },
+    dataset: { name: "Shisha charcoal production cost model", desc: "Per-kg and per-ton cost breakdown of coconut shisha charcoal production in Indonesia — raw material with production loss, binder, fuel, wages, packaging — with selling price and factory EBITDA by raw-material price and margin." }
+  });
+}
+
+/* =========================================================================
+ * 6.11 PRICE-CHECK — which grade standard does a quoted price correspond to?
+ * ====================================================================== */
+function buildPriceCheck() {
+  var FA = F.factoryModel(C);
+  var bulk = F.priceGrade(FA, 0, false, false).prices;
+  var rows = F.SPEC_GRADES.map(function (g, i) {
+    return [g, F.pct(FA.grade_loss_pct[i], 0), F.money(bulk[i]), F.money(bulk[i] + FA.pack_inner_usd_t), F.money(bulk[i] + FA.pack_inner_usd_t + FA.pack_master_usd_t)];
+  });
+  var ladder = table(["Grade", "Material loss", "Bulk (USD/t)", "+ inner boxes", "+ inner + colour master"], rows,
+    { caption: "Standard factory price per grade at raw material Rp " + F.num(FA.raw_idr_per_kg) + "/kg, Rp " + F.num(FA.fx_idr) + "/USD, " + F.pct(FA.margin_pct, 0) + " margin", highlight: 0,
+      foot: "Bulk = production cost only, with margin. Inner boxes add " + F.money(FA.pack_inner_usd_t) + "/t; a colour-printed master box adds " + F.money(FA.pack_master_usd_t) + "/t. Cleaner grades cost more because more material is cleaned away." });
+
+  var ex = F.priceGrade(FA, 1500, false, false);
+  var exGrade = F.SPEC_GRADES[ex.nearest];
+  var floor = bulk[bulk.length - 1] * 0.95;
+
+  return page({
+    slug: "price-check",
+    title: "Shisha Charcoal Price Checker — Is Your Quote Platinum, Super Premium or Premium?",
+    lede: "A quoted price tells you which grade you are really buying. At current input costs, genuine <strong>Premium</strong>-grade bulk shisha charcoal stands at about <strong>" + F.money(bulk[2]) +
+      "/t</strong>, <strong>Super Premium</strong> at <strong>" + F.money(bulk[1]) + "/t</strong> and <strong>Platinum</strong> at <strong>" + F.money(bulk[0]) +
+      "/t</strong> — the gap is the extra material lost to reach lower ash. An offer far below the Premium standard is a red flag, not a bargain.",
+    capsules: [
+      "Genuine bulk shisha charcoal stands at about <strong>" + F.money(bulk[2]) + "/t</strong> for Premium, <strong>" + F.money(bulk[1]) + "/t</strong> for Super Premium and <strong>" + F.money(bulk[0]) + "/t</strong> for Platinum grade at current input costs (verified " + V + "; factory model).",
+      "Platinum grade costs more because about <strong>" + F.pct(FA.grade_loss_pct[0], 0) + "</strong> of the raw material is cleaned away for low ash, versus " + F.pct(FA.grade_loss_pct[2], 0) + " for Premium (verified " + V + ").",
+      "An offer more than ~5% below the Premium standard (under ≈ <strong>" + F.money(floor) + "/t</strong> bulk) is below the cost of genuine coconut briquette — expect mixed material, chemical binders or short weight (verified " + V + ")."
+    ],
+    sections: [
+      ladder,
+      h2("How to read a supplier quote"),
+      p("Start from the packaging: a bulk quote and a retail-packed quote are different products. Inner boxes add about " + F.money(FA.pack_inner_usd_t) + "/t and a colour-printed master box about " + F.money(FA.pack_master_usd_t) + "/t, so strip those out before comparing against the grade standards. A quote for a 22 t order at $1,500/t bulk is closest to the " + exGrade + " standard — if the supplier calls it Platinum, either the spec is not real Platinum or something else in the deal is compensating."),
+      p("The standards come from the production-cost model: each grade's material loss (" + F.SPEC_GRADES.map(function (g, i) { return F.pct(FA.grade_loss_pct[i], 0) + " " + g; }).join(", ") + ") is applied to the raw material, fixed production costs are added, then a " + F.pct(FA.margin_pct, 0) + " factory margin. They move with the rupiah, the raw-material market and the margin — treat them as a reality check on a quote, and confirm the actual grade with a COA and burn test.")
+    ],
+    faq: [
+      { q: "What grade of shisha charcoal does $1,500 per ton buy?", a: "At current input costs, $1,500/t bulk is closest to the <strong>" + exGrade + "</strong> standard (" + F.money(bulk[2]) + "/t). Genuine Platinum stands near " + F.money(bulk[0]) + "/t bulk, so a $1,500 “Platinum” offer deserves a burn test.", aPlain: "$1,500/t bulk is closest to the " + exGrade + " standard; genuine Platinum stands near " + F.money(bulk[0]) + "/t." },
+      { q: "Why is Platinum grade more expensive than Premium?", a: "Not because of marketing — because of yield. Platinum loses about " + F.pct(FA.grade_loss_pct[0], 0) + " of the raw material to extra rotary cleaning for low ash, versus " + F.pct(FA.grade_loss_pct[2], 0) + " for Premium, so every finished kilogram consumed more shell.", aPlain: "Platinum loses ~" + F.pct(FA.grade_loss_pct[0], 0) + " of raw material to extra cleaning versus ~" + F.pct(FA.grade_loss_pct[2], 0) + " for Premium, so each finished kg costs more." },
+      { q: "Is a very cheap shisha charcoal offer a scam?", a: "Below roughly " + F.money(floor) + "/t bulk the numbers stop working for genuine coconut briquette at standard spec. Common ways the gap is closed: mixed wood or low-grade material, chemical binders instead of tapioca, higher moisture, or short weight per carton.", aPlain: "Below about " + F.money(floor) + "/t bulk, genuine coconut briquette does not add up — expect mixed material, chemicals, moisture or short weight." }
+    ],
+    widget: { name: "price-check", heading: "Check your quote", note: "Enter the offered price and tick what the quote includes — the checker names the closest grade standard." },
+    dataset: { name: "Shisha charcoal grade price standards", desc: "Standard factory price per grade (Platinum, Super Premium, Premium) of coconut shisha charcoal, bulk and retail-packed, derived from the production-cost model with per-grade material loss." }
+  });
+}
+
 /* ---- write all ---------------------------------------------------------- */
 var BUILDS = {
   "container-load": buildContainerLoad,
@@ -665,7 +792,9 @@ var BUILDS = {
   "incoterms": buildIncoterms,
   "roi-payback": buildRoi,
   "spec-comparison": buildSpec,
-  "packaging-price": buildPackaging
+  "packaging-price": buildPackaging,
+  "production-cost": buildProductionCost,
+  "price-check": buildPriceCheck
 };
 
 var wrote = [];

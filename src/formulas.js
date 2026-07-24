@@ -230,6 +230,99 @@
     return i < 0 ? "—" : (i >= SPEC_GRADES.length ? "below Premium" : SPEC_GRADES[i]);
   }
 
+  /* ---- 6.10/6.11 Factory production cost & price-to-grade ----------------
+   * The cost model behind the "Cost of Production for Shisha Charcoal" article
+   * (its Excel, reproduced to the cent). Cost lines are Rp per kg of FINISHED
+   * charcoal. Lines with scales_with_loss are multiplied — together with the
+   * raw-material price — by (1 + loss%), the spreadsheet's 1.25-coefficient
+   * convention. Margin is a markup on cost: price = cost × (1 + margin).
+   * config.factory (DB-driven, admin-editable) overrides; DEFAULT_FACTORY is
+   * the seed so both calculators work before the API carries the block. */
+  var DEFAULT_FACTORY = {
+    fx_idr: 17000,                 // Rp per USD
+    raw_idr_per_kg: 13500,         // carbonized shell at factory gate
+    margin_pct: 25,                // factory margin, % on cost
+    loss_pct: 25,                  // material loss in production (calc 1)
+    grade_loss_pct: [35, 25, 20],  // per grade, SPEC_GRADES order
+    pack_inner_usd_t: 120,         // inner boxes adder, USD/t
+    pack_master_usd_t: 60,         // colour master box adder, USD/t
+    costs: [
+      { item: "discharge",        label: "Unloading from truck",     idr_per_kg: 50,   section: "production", scales_with_loss: 1 },
+      { item: "tapioca",          label: "Tapioca binder",           idr_per_kg: 616,  section: "production", scales_with_loss: 0 },
+      { item: "oven",             label: "Oven drying (wood-pellet)",idr_per_kg: 200,  section: "production", scales_with_loss: 0 },
+      { item: "labor",            label: "Production wages",         idr_per_kg: 1850, section: "production", scales_with_loss: 0 },
+      { item: "stuffing",         label: "Container stuffing",       idr_per_kg: 50,   section: "production", scales_with_loss: 0 },
+      { item: "electricity",      label: "Electricity",              idr_per_kg: 500,  section: "production", scales_with_loss: 0 },
+      { item: "maintenance",      label: "Maintenance",              idr_per_kg: 350,  section: "production", scales_with_loss: 0 },
+      { item: "office",           label: "Office & misc",            idr_per_kg: 750,  section: "production", scales_with_loss: 0 },
+      { item: "inner_plastic",    label: "Inner plastic bag",        idr_per_kg: 300,  section: "packaging",  scales_with_loss: 0 },
+      { item: "tk_inner_plastic", label: "Labour — inner plastic",   idr_per_kg: 300,  section: "packaging",  scales_with_loss: 0 },
+      { item: "inner_box",        label: "Inner box",                idr_per_kg: 1825, section: "packaging",  scales_with_loss: 0 },
+      { item: "tk_inner_box",     label: "Labour — inner box",       idr_per_kg: 150,  section: "packaging",  scales_with_loss: 0 },
+      { item: "master_box",       label: "Master box",               idr_per_kg: 650,  section: "packaging",  scales_with_loss: 0 },
+      { item: "tk_master_box",    label: "Labour — master box",      idr_per_kg: 100,  section: "packaging",  scales_with_loss: 0 },
+      { item: "sticker",          label: "Sticker",                  idr_per_kg: 105,  section: "packaging",  scales_with_loss: 0 },
+      { item: "silica",           label: "Silica gel",               idr_per_kg: 50,   section: "packaging",  scales_with_loss: 0 }
+    ]
+  };
+
+  function factoryModel(cfg) {
+    var f = cfg && cfg.factory;
+    return (f && f.costs && f.costs.length) ? f : DEFAULT_FACTORY;
+  }
+
+  // Per-kg IDR cost split at a given raw price and loss %.
+  function factoryCost(fa, rawIdr, lossPct) {
+    var scaled = rawIdr, fixed = 0, pack = 0;
+    (fa.costs || []).forEach(function (c) {
+      if (c.scales_with_loss) scaled += c.idr_per_kg;
+      else if (c.section === "packaging") pack += c.idr_per_kg;
+      else fixed += c.idr_per_kg;
+    });
+    var prodIdr = scaled * (1 + lossPct / 100) + fixed;
+    return { prodIdr: prodIdr, packIdr: pack, totalIdr: prodIdr + pack };
+  }
+
+  // Calc 1: full stack incl. packaging → USD/t cost, selling price and profit.
+  function factoryPrice(fa, rawIdr, fx, marginPct) {
+    var c = factoryCost(fa, rawIdr, fa.loss_pct);
+    var perT = 1000 / fx;
+    var costT = c.totalIdr * perT;
+    return {
+      costIdrKg: c.totalIdr,
+      prodT: c.prodIdr * perT,
+      packT: c.packIdr * perT,
+      costT: costT,
+      priceT: costT * (1 + marginPct / 100),
+      profitT: costT * (marginPct / 100)
+    };
+  }
+
+  // Calc 2: a grade's standard price — BULK production cost (no packaging lines)
+  // at that grade's loss %, plus margin, plus flat USD adders when included.
+  function gradePriceT(fa, gi, addInner, addMaster) {
+    var c = factoryCost(fa, fa.raw_idr_per_kg, fa.grade_loss_pct[gi]);
+    var bulk = (c.prodIdr / fa.fx_idr) * 1000 * (1 + fa.margin_pct / 100);
+    return bulk + (addInner ? fa.pack_inner_usd_t : 0) + (addMaster ? fa.pack_master_usd_t : 0);
+  }
+
+  // Which grade standard is a quoted price closest to? ±5% beyond the ladder's
+  // ends flags "suspiciously cheap" / "above Platinum".
+  function priceGrade(fa, offerT, addInner, addMaster) {
+    var prices = SPEC_GRADES.map(function (_g, i) { return gradePriceT(fa, i, addInner, addMaster); });
+    var nearest = 0;
+    for (var i = 1; i < prices.length; i++) {
+      if (Math.abs(offerT - prices[i]) < Math.abs(offerT - prices[nearest])) nearest = i;
+    }
+    return {
+      prices: prices,
+      nearest: nearest,
+      delta: offerT - prices[nearest],
+      tooLow: offerT < prices[prices.length - 1] * 0.95,
+      aboveTop: offerT > prices[0] * 1.05
+    };
+  }
+
   return {
     money: money, money2: money2, num: num, pct: pct,
     containerLoad: containerLoad,
@@ -241,6 +334,11 @@
     roiPayback: roiPayback,
     gradeValue: gradeValue,
     gradeName: gradeName,
+    factoryModel: factoryModel,
+    factoryCost: factoryCost,
+    factoryPrice: factoryPrice,
+    gradePriceT: gradePriceT,
+    priceGrade: priceGrade,
     INCOTERM_STAGES: INCOTERM_STAGES,
     SPEC_GRADES: SPEC_GRADES,
     SPEC_ROWS: SPEC_ROWS
