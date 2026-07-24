@@ -1,7 +1,7 @@
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-07-24T05:31:52.798Z
+ *  Generated:   2026-07-24T08:04:29.668Z
  */
 (function (root, factory) {
   var cfg = factory();
@@ -913,6 +913,133 @@
       ]
     },
     "routing_note": "Red Sea diversions (Cape of Good Hope routing) and Hormuz disruption can add 10-20+ days to EU/Gulf lanes. Treat as user-editable and date-stamp.",
+    "factory": {
+      "fx_idr": 17000,
+      "raw_idr_per_kg": 13500,
+      "margin_pct": 25,
+      "loss_pct": 25,
+      "grade_loss_pct": [
+        35,
+        25,
+        20
+      ],
+      "pack_inner_usd_t": 120,
+      "pack_master_usd_t": 60,
+      "costs": [
+        {
+          "item": "discharge",
+          "label": "Unloading from truck",
+          "idr_per_kg": 50,
+          "section": "production",
+          "scales_with_loss": 1
+        },
+        {
+          "item": "tapioca",
+          "label": "Tapioca binder",
+          "idr_per_kg": 616,
+          "section": "production",
+          "scales_with_loss": 0
+        },
+        {
+          "item": "oven",
+          "label": "Oven drying (wood-pellet)",
+          "idr_per_kg": 200,
+          "section": "production",
+          "scales_with_loss": 0
+        },
+        {
+          "item": "labor",
+          "label": "Production wages",
+          "idr_per_kg": 1850,
+          "section": "production",
+          "scales_with_loss": 0
+        },
+        {
+          "item": "stuffing",
+          "label": "Container stuffing",
+          "idr_per_kg": 50,
+          "section": "production",
+          "scales_with_loss": 0
+        },
+        {
+          "item": "electricity",
+          "label": "Electricity",
+          "idr_per_kg": 500,
+          "section": "production",
+          "scales_with_loss": 0
+        },
+        {
+          "item": "maintenance",
+          "label": "Maintenance",
+          "idr_per_kg": 350,
+          "section": "production",
+          "scales_with_loss": 0
+        },
+        {
+          "item": "office",
+          "label": "Office & misc",
+          "idr_per_kg": 750,
+          "section": "production",
+          "scales_with_loss": 0
+        },
+        {
+          "item": "inner_plastic",
+          "label": "Inner plastic bag",
+          "idr_per_kg": 300,
+          "section": "packaging",
+          "scales_with_loss": 0
+        },
+        {
+          "item": "tk_inner_plastic",
+          "label": "Labour — inner plastic",
+          "idr_per_kg": 300,
+          "section": "packaging",
+          "scales_with_loss": 0
+        },
+        {
+          "item": "inner_box",
+          "label": "Inner box",
+          "idr_per_kg": 1825,
+          "section": "packaging",
+          "scales_with_loss": 0
+        },
+        {
+          "item": "tk_inner_box",
+          "label": "Labour — inner box",
+          "idr_per_kg": 150,
+          "section": "packaging",
+          "scales_with_loss": 0
+        },
+        {
+          "item": "master_box",
+          "label": "Master box",
+          "idr_per_kg": 650,
+          "section": "packaging",
+          "scales_with_loss": 0
+        },
+        {
+          "item": "tk_master_box",
+          "label": "Labour — master box",
+          "idr_per_kg": 100,
+          "section": "packaging",
+          "scales_with_loss": 0
+        },
+        {
+          "item": "sticker",
+          "label": "Sticker",
+          "idr_per_kg": 105,
+          "section": "packaging",
+          "scales_with_loss": 0
+        },
+        {
+          "item": "silica",
+          "label": "Silica gel",
+          "idr_per_kg": 50,
+          "section": "packaging",
+          "scales_with_loss": 0
+        }
+      ]
+    },
     "ports": {
       "origin": {
         "SRG": "Semarang",
