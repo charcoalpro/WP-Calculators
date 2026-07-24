@@ -769,7 +769,7 @@ function buildPriceCheck() {
     sections: [
       ladder,
       h2("How to read a supplier quote"),
-      p("Start from the packaging: a bulk quote and a retail-packed quote are different products. Inner boxes add about " + F.money(FA.pack_inner_usd_t) + "/t and a colour-printed master box about " + F.money(FA.pack_master_usd_t) + "/t, so strip those out before comparing against the grade standards. A quote for a 22 t order at $1,500/t bulk is closest to the " + exGrade + " standard — if the supplier calls it Platinum, either the spec is not real Platinum or something else in the deal is compensating."),
+      p("Start from the packaging: a bulk quote and a retail-packed quote are different products. Inner boxes add about " + F.money(FA.pack_inner_usd_t) + "/t and a colour-printed master box about " + F.money(FA.pack_master_usd_t) + "/t, so strip those out before comparing against the grade standards. A quote of $1,500/t bulk is closest to the " + exGrade + " standard — if the supplier calls it Platinum, either the spec is not real Platinum or something else in the deal is compensating."),
       p("The standards come from the production-cost model: each grade's material loss (" + F.SPEC_GRADES.map(function (g, i) { return F.pct(FA.grade_loss_pct[i], 0) + " " + g; }).join(", ") + ") is applied to the raw material, fixed production costs are added, then a " + F.pct(FA.margin_pct, 0) + " factory margin. They move with the rupiah, the raw-material market and the margin — treat them as a reality check on a quote, and confirm the actual grade with a COA and burn test.")
     ],
     faq: [
