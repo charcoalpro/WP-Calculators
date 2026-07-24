@@ -23,15 +23,20 @@ cd "$(dirname "$0")"
 : "${CCX_API_URL:?Set CCX_API_URL, e.g. https://id.charcoal.pro/admin/api}"
 : "${CCX_API_TOKEN:?Set CCX_API_TOKEN (must match the token in cpanel-api/public/lib/config.php)}"
 
-echo "==> 1/3  Pulling config from $CCX_API_URL/config"
+echo "==> 1/4  Pulling config from $CCX_API_URL/config"
 node generator/api-adapter.js --write
 
-echo "==> 2/3  Rebuilding static blocks"
+echo "==> 2/4  Rebuilding static blocks"
 node generator/build-static.js
 
-echo "==> 3/3  Rebuilding self-contained blocks"
+echo "==> 3/4  Rebuilding self-contained blocks"
 node generator/build-embedded.js
+
+echo "==> 4/4  Rebuilding the external widget bundle (dist/ccx-app.js)"
+node generator/build-bundle.js
 
 echo ""
 echo "Done. Paste the updated dist/embedded/*.html into your pages (one per page),"
 echo "or dist/static/*.html if you use the shared-asset method. Then clear any cache."
+echo "If the site loads ccx-app.js from jsDelivr, push to GitHub and purge:"
+echo "  https://purge.jsdelivr.net/gh/charcoalpro/WP-Calculators@main/dist/ccx-app.js"

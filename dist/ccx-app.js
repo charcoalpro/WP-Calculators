@@ -1,4 +1,4 @@
-/*! CCX ccx-app.js — external widget bundle. Generated 2026-07-24T05:31:52.988Z. Do NOT hand-edit. */
+/*! CCX ccx-app.js — external widget bundle. Generated 2026-07-24T05:41:47.222Z. Do NOT hand-edit. */
 /* ---- config.js ---- */
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
@@ -1279,9 +1279,21 @@
     ]
   };
 
+  // A malformed admin edit (bad JSON, wrong-length grade list, zero FX, blank
+  // number) must never bake $NaN into the site — any invalid block falls back
+  // to the seed wholesale.
+  function isNum(v) { return typeof v === "number" && isFinite(v); }
   function factoryModel(cfg) {
     var f = cfg && cfg.factory;
-    return (f && f.costs && f.costs.length) ? f : DEFAULT_FACTORY;
+    var ok = f && f.costs && f.costs.length &&
+      f.costs.every(function (c) { return isNum(c.idr_per_kg); }) &&
+      isNum(f.fx_idr) && f.fx_idr > 0 &&
+      isNum(f.raw_idr_per_kg) && f.raw_idr_per_kg > 0 &&
+      isNum(f.margin_pct) && isNum(f.loss_pct) &&
+      isNum(f.pack_inner_usd_t) && isNum(f.pack_master_usd_t) &&
+      !!f.grade_loss_pct && f.grade_loss_pct.length === SPEC_GRADES.length &&
+      f.grade_loss_pct.every(function (l) { return isNum(l) && l > 0; });
+    return ok ? f : DEFAULT_FACTORY;
   }
 
   // Per-kg IDR cost split at a given raw price and loss %.
