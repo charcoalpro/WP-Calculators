@@ -1,9 +1,9 @@
-/*! CCX ccx-app.js — external widget bundle. Generated 2026-08-12T07:04:49.648Z. Do NOT hand-edit. */
+/*! CCX ccx-app.js — external widget bundle. Generated 2026-08-13T07:08:31.046Z. Do NOT hand-edit. */
 /* ---- config.js ---- */
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-08-12T07:04:49.466Z
+ *  Generated:   2026-08-13T07:08:30.856Z
  */
 (function (root, factory) {
   var cfg = factory();
@@ -344,6 +344,11 @@
         "port": "Copenhagen",
         "country": "Denmark",
         "days": 52
+      },
+      {
+        "port": "Caucedo",
+        "country": "Dominican Republic",
+        "days": 51
       },
       {
         "port": "Alexandria",
@@ -824,6 +829,11 @@
         "port": "Tanpa Bay",
         "country": "United States (USA)",
         "days": 57
+      },
+      {
+        "port": "Puerto Cabello",
+        "country": "Venezuela",
+        "days": 55
       },
       {
         "port": "Aden",
