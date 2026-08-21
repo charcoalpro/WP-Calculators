@@ -1,7 +1,7 @@
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-08-20T06:24:13.722Z
+ *  Generated:   2026-08-21T06:24:13.965Z
  */
 (function (root, factory) {
   var cfg = factory();
