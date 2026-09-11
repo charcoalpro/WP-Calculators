@@ -1,7 +1,7 @@
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-09-09T10:17:05.788Z
+ *  Generated:   2026-09-11T10:07:30.561Z
  */
 (function (root, factory) {
   var cfg = factory();
@@ -152,74 +152,79 @@
       "inland_per_container": 300
     },
     "freight_per_container": {
-      "SRG-LAX": 8240,
+      "SRG-LAX": 10500,
       "SRG-NYC": 5500,
-      "SRG-HAM": 2450,
-      "SRG-FXT": 3350,
+      "SRG-HAM": 3400,
+      "SRG-FXT": 4000,
       "SRG-JEA": 4500,
-      "SRG-JED": 4450,
-      "SRG-NSA": 2560,
+      "SRG-JED": 9700,
+      "SRG-NSA": 4720,
       "SRG-MER": 5200
     },
     "transit_days": {
       "SRG-LAX": [
-        52,
-        52
+        42,
+        42
       ],
       "SRG-NYC": [
         30,
         45
       ],
       "SRG-HAM": [
-        45,
-        45
+        39,
+        39
       ],
       "SRG-FXT": [
-        35,
-        35
+        32,
+        32
       ],
       "SRG-JEA": [
         20,
         20
       ],
       "SRG-JED": [
-        25,
-        25
+        34,
+        34
       ],
       "SRG-NSA": [
-        26,
-        26
+        17,
+        17
       ],
       "SRG-MER": [
-        42,
-        42
+        28,
+        28
       ]
     },
     "freight_by_country": {
-      "UK": {
-        "ft20": 3350,
-        "ft40": 5100,
-        "days": 35
-      },
-      "IN": {
-        "ft20": 2560,
-        "ft40": 2795,
-        "days": 26
-      },
       "US": {
-        "ft20": 8240,
-        "ft40": 10300,
-        "days": 52
-      },
-      "TR": {
-        "ft20": 5200,
-        "ft40": 7800,
+        "ft20": 10500,
+        "ft40": 13200,
         "days": 42
       },
       "SA": {
-        "ft20": 4450,
-        "ft40": 6250,
-        "days": 25
+        "ft20": 9700,
+        "ft40": 13800,
+        "days": 34
+      },
+      "DE": {
+        "ft20": 3400,
+        "ft40": 5000,
+        "days": 39
+      },
+      "UK": {
+        "ft20": 4000,
+        "ft40": 5600,
+        "days": 32
+      },
+      "IN": {
+        "ft20": 4720,
+        "ft40": 5150,
+        "days": 17
+      },
+      "TR": {
+        "ft20": 5200,
+        "ft40": 7450,
+        "days": 28
       },
       "AE": {
         "ft20": 4500,
@@ -235,11 +240,6 @@
         "ft20": 1500,
         "ft40": 2520,
         "days": 29
-      },
-      "DE": {
-        "ft20": 2450,
-        "ft40": 3850,
-        "days": 45
       }
     },
     "transit_ports": [
@@ -251,7 +251,7 @@
       {
         "port": "Alger (Algiers)",
         "country": "Algeria",
-        "days": 55
+        "days": 35
       },
       {
         "port": "Melbourne",
@@ -341,7 +341,7 @@
       {
         "port": "Limassol",
         "country": "Cyprus",
-        "days": 41
+        "days": 52
       },
       {
         "port": "Copenhagen",
@@ -396,17 +396,17 @@
       {
         "port": "Poti",
         "country": "Georgia",
-        "days": 45
+        "days": 29
       },
       {
         "port": "Bremerhaven",
         "country": "Germany",
-        "days": 45
+        "days": 37
       },
       {
         "port": "Hamburg",
         "country": "Germany",
-        "days": 45
+        "days": 39
       },
       {
         "port": "Tema",
@@ -436,7 +436,7 @@
       {
         "port": "Kolkata",
         "country": "India",
-        "days": 26
+        "days": 20
       },
       {
         "port": "Mumbai",
@@ -446,12 +446,12 @@
       {
         "port": "Mundra",
         "country": "India",
-        "days": 18
+        "days": 17
       },
       {
         "port": "Nava Sheva",
         "country": "India",
-        "days": 15
+        "days": 13
       },
       {
         "port": "Bandar Abbas",
@@ -466,17 +466,17 @@
       {
         "port": "Umm Qasr",
         "country": "Iraq",
-        "days": 17
+        "days": 30
       },
       {
         "port": "Ashdod",
         "country": "Israel (Palestine)",
-        "days": 35
+        "days": 34
       },
       {
         "port": "Haifa",
         "country": "Israel (Palestine)",
-        "days": 35
+        "days": 36
       },
       {
         "port": "Genoa",
@@ -501,7 +501,7 @@
       {
         "port": "Aqaba",
         "country": "Jordan",
-        "days": 53
+        "days": 59
       },
       {
         "port": "Mombasa",
@@ -521,7 +521,12 @@
       {
         "port": "Shuwaikh",
         "country": "Kuwait",
-        "days": 20
+        "days": 33
+      },
+      {
+        "port": "shuaiba",
+        "country": "Kuwait",
+        "days": 26
       },
       {
         "port": "Apapa",
@@ -531,7 +536,7 @@
       {
         "port": "Beirut",
         "country": "Lebanon",
-        "days": 42
+        "days": 45
       },
       {
         "port": "Benghazi",
@@ -551,7 +556,7 @@
       {
         "port": "Klaipeda",
         "country": "Lithuania",
-        "days": 55
+        "days": 43
       },
       {
         "port": "Port Klang",
@@ -581,7 +586,7 @@
       {
         "port": "Rotterdam",
         "country": "Netherlands (Holland)",
-        "days": 37
+        "days": 35
       },
       {
         "port": "Tauranga",
@@ -596,12 +601,12 @@
       {
         "port": "Salalah",
         "country": "Oman",
-        "days": 20
+        "days": 21
       },
       {
         "port": "Sohar",
         "country": "Oman",
-        "days": 38
+        "days": 27
       },
       {
         "port": "Karachi",
@@ -621,7 +626,7 @@
       {
         "port": "Gdynia",
         "country": "Poland",
-        "days": 48
+        "days": 45
       },
       {
         "port": "Lisbon",
@@ -636,7 +641,7 @@
       {
         "port": "Dohar",
         "country": "Qatar",
-        "days": 15
+        "days": 37
       },
       {
         "port": "Hamad",
@@ -666,32 +671,32 @@
       {
         "port": "Saint Petersburg",
         "country": "Russia",
-        "days": 45
+        "days": 42
       },
       {
         "port": "Vladivostok",
         "country": "Russia",
-        "days": 18
+        "days": 20
       },
       {
         "port": "Dammam",
         "country": "Saudi Arabia (KSA)",
-        "days": 18
+        "days": 28
       },
       {
         "port": "King Abdullah",
         "country": "Saudi Arabia (KSA)",
-        "days": 43
+        "days": 31
       },
       {
         "port": "Riyadh",
         "country": "Saudi Arabia (KSA)",
-        "days": 36
+        "days": 34
       },
       {
         "port": "Jeddah",
         "country": "Saudi Arabia",
-        "days": 25
+        "days": 32
       },
       {
         "port": "Dakar",
@@ -711,7 +716,7 @@
       {
         "port": "Valencia",
         "country": "Spain",
-        "days": 55
+        "days": 34
       },
       {
         "port": "Latakia",
@@ -741,22 +746,22 @@
       {
         "port": "Iskenderum",
         "country": "Turkey",
-        "days": 42
+        "days": 36
       },
       {
         "port": "Istanbul",
         "country": "Turkey",
-        "days": 35
+        "days": 26
       },
       {
         "port": "Izmir",
         "country": "Turkey",
-        "days": 42
+        "days": 28
       },
       {
         "port": "Mersin",
         "country": "Turkey",
-        "days": 35
+        "days": 34
       },
       {
         "port": "Port of Long Beach (USA)",
@@ -776,32 +781,32 @@
       {
         "port": "Felixstowe",
         "country": "United Kingdom (UK)",
-        "days": 35
+        "days": 31
       },
       {
         "port": "Glasgow",
         "country": "United Kingdom (UK)",
-        "days": 39
+        "days": 32
       },
       {
         "port": "London",
         "country": "United Kingdom (UK)",
-        "days": 43
+        "days": 51
       },
       {
         "port": "Manchester",
         "country": "United Kingdom (UK)",
-        "days": 48
+        "days": 32
       },
       {
         "port": "Southampton",
         "country": "United Kingdom (UK)",
-        "days": 34
+        "days": 36
       },
       {
         "port": "Houston",
         "country": "United States (USA)",
-        "days": 52
+        "days": 44
       },
       {
         "port": "Jacksonville",
@@ -846,7 +851,7 @@
       {
         "port": "Aden",
         "country": "Yemen",
-        "days": 33
+        "days": 23
       },
       {
         "port": "Hodeidah",
