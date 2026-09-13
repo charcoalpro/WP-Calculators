@@ -1,9 +1,9 @@
-/*! CCX ccx-app.js — external widget bundle. Generated 2026-09-11T10:07:30.751Z. Do NOT hand-edit. */
+/*! CCX ccx-app.js — external widget bundle. Generated 2026-09-13T10:43:54.807Z. Do NOT hand-edit. */
 /* ---- config.js ---- */
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-09-11T10:07:30.561Z
+ *  Generated:   2026-09-13T10:43:54.657Z
  */
 (function (root, factory) {
   var cfg = factory();
@@ -158,7 +158,7 @@
       "SRG-NYC": 5500,
       "SRG-HAM": 3400,
       "SRG-FXT": 4000,
-      "SRG-JEA": 4500,
+      "SRG-JEA": 12800,
       "SRG-JED": 9700,
       "SRG-NSA": 4720,
       "SRG-MER": 5200
@@ -181,8 +181,8 @@
         32
       ],
       "SRG-JEA": [
-        20,
-        20
+        35,
+        35
       ],
       "SRG-JED": [
         34,
@@ -198,6 +198,21 @@
       ]
     },
     "freight_by_country": {
+      "AE": {
+        "ft20": 12800,
+        "ft40": 15900,
+        "days": 35
+      },
+      "AU": {
+        "ft20": 3150,
+        "ft40": 5800,
+        "days": 29
+      },
+      "CA": {
+        "ft20": 8900,
+        "ft40": 11100,
+        "days": 49
+      },
       "US": {
         "ft20": 10500,
         "ft40": 13200,
@@ -227,21 +242,6 @@
         "ft20": 5200,
         "ft40": 7450,
         "days": 28
-      },
-      "AE": {
-        "ft20": 4500,
-        "ft40": 4800,
-        "days": 20
-      },
-      "CA": {
-        "ft20": 2425,
-        "ft40": 3035,
-        "days": 38
-      },
-      "AU": {
-        "ft20": 1500,
-        "ft40": 2520,
-        "days": 29
       }
     },
     "transit_ports": [
@@ -258,7 +258,7 @@
       {
         "port": "Melbourne",
         "country": "Australia",
-        "days": 31
+        "days": 21
       },
       {
         "port": "Sydney",
@@ -298,37 +298,37 @@
       {
         "port": "Montreal",
         "country": "Canada",
-        "days": 57
+        "days": 49
       },
       {
         "port": "Toronto",
         "country": "Canada",
-        "days": 55
+        "days": 40
       },
       {
         "port": "Vancouver",
         "country": "Canada",
-        "days": 38
+        "days": 33
       },
       {
         "port": "Qingdao",
         "country": "China",
-        "days": 14
+        "days": 16
       },
       {
         "port": "Shanghai",
         "country": "China",
-        "days": 15
+        "days": 11
       },
       {
         "port": "Tianjin",
         "country": "China",
-        "days": 12
+        "days": 19
       },
       {
         "port": "Xiamen",
         "country": "China",
-        "days": 15
+        "days": 11
       },
       {
         "port": "Xingang",
@@ -363,12 +363,12 @@
       {
         "port": "Dekheila (Alexandria)",
         "country": "Egypt",
-        "days": 42
+        "days": 40
       },
       {
         "port": "Port Said West",
         "country": "Egypt",
-        "days": 42
+        "days": 49
       },
       {
         "port": "Sokhan",
@@ -378,7 +378,7 @@
       {
         "port": "Sokhna",
         "country": "Egypt",
-        "days": 39
+        "days": 60
       },
       {
         "port": "Suva",
@@ -413,7 +413,7 @@
       {
         "port": "Tema",
         "country": "Ghana",
-        "days": 69
+        "days": 25
       },
       {
         "port": "Piraeus",
@@ -483,17 +483,17 @@
       {
         "port": "Genoa",
         "country": "Italy",
-        "days": 35
+        "days": 31
       },
       {
         "port": "Gioia Tauro",
         "country": "Italy",
-        "days": 55
+        "days": 39
       },
       {
         "port": "Abidjan",
         "country": "Ivory Coast",
-        "days": 51
+        "days": 33
       },
       {
         "port": "Tokyo",
@@ -573,7 +573,7 @@
       {
         "port": "Casablanca",
         "country": "Morocco",
-        "days": 47
+        "days": 40
       },
       {
         "port": "Kathamandu",
@@ -708,7 +708,7 @@
       {
         "port": "Durban",
         "country": "South Africa",
-        "days": 35
+        "days": 23
       },
       {
         "port": "Barcelona",
@@ -773,12 +773,12 @@
       {
         "port": "Fujairah",
         "country": "United Arab Emirates (UAE)",
-        "days": 20
+        "days": 30
       },
       {
         "port": "Jebel Ali",
         "country": "United Arab Emirates (UAE)",
-        "days": 14
+        "days": 35
       },
       {
         "port": "Felixstowe",
@@ -813,17 +813,17 @@
       {
         "port": "Jacksonville",
         "country": "United States (USA)",
-        "days": 57
+        "days": 43
       },
       {
         "port": "New Orleans",
         "country": "United States (USA)",
-        "days": 83
+        "days": 66
       },
       {
         "port": "New York",
         "country": "United States (USA)",
-        "days": 40
+        "days": 32
       },
       {
         "port": "Norfolk",
@@ -833,7 +833,7 @@
       {
         "port": "Savanah USA",
         "country": "United States (USA)",
-        "days": 56
+        "days": 42
       },
       {
         "port": "Tacoma",
