@@ -1,9 +1,9 @@
-/*! CCX ccx-app.js — external widget bundle. Generated 2026-09-15T10:35:59.860Z. Do NOT hand-edit. */
+/*! CCX ccx-app.js — external widget bundle. Generated 2026-09-16T10:24:45.346Z. Do NOT hand-edit. */
 /* ---- config.js ---- */
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-09-15T10:35:59.669Z
+ *  Generated:   2026-09-16T10:24:45.160Z
  */
 (function (root, factory) {
   var cfg = factory();
