@@ -1,7 +1,7 @@
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-09-20T10:13:20.656Z
+ *  Generated:   2026-09-21T11:17:56.084Z
  */
 (function (root, factory) {
   var cfg = factory();
@@ -156,7 +156,7 @@
       "SRG-NYC": 5500,
       "SRG-HAM": 3400,
       "SRG-FXT": 4000,
-      "SRG-JEA": 12800,
+      "SRG-JEA": 8700,
       "SRG-JED": 9700,
       "SRG-NSA": 4720,
       "SRG-MER": 5200
@@ -197,8 +197,8 @@
     },
     "freight_by_country": {
       "AE": {
-        "ft20": 12800,
-        "ft40": 15900,
+        "ft20": 8700,
+        "ft40": 12500,
         "days": 35
       },
       "AU": {
@@ -857,6 +857,11 @@
         "port": "Hodeidah",
         "country": "Yemen",
         "days": 25
+      },
+      {
+        "port": "ploce",
+        "country": "croatia",
+        "days": 51
       }
     ],
     "packaging": {
