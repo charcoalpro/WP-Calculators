@@ -1,7 +1,7 @@
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-09-30T11:29:42.524Z
+ *  Generated:   2026-10-02T11:29:36.544Z
  */
 (function (root, factory) {
   var cfg = factory();
@@ -152,19 +152,19 @@
       "inland_per_container": 300
     },
     "freight_per_container": {
-      "SRG-LAX": 10500,
+      "SRG-LAX": 10491,
       "SRG-NYC": 5500,
       "SRG-HAM": 3400,
       "SRG-FXT": 4000,
       "SRG-JEA": 8700,
-      "SRG-JED": 9700,
+      "SRG-JED": 7596,
       "SRG-NSA": 4720,
       "SRG-MER": 5200
     },
     "transit_days": {
       "SRG-LAX": [
-        42,
-        42
+        56,
+        56
       ],
       "SRG-NYC": [
         30,
@@ -183,8 +183,8 @@
         35
       ],
       "SRG-JED": [
-        34,
-        34
+        33,
+        33
       ],
       "SRG-NSA": [
         17,
@@ -196,6 +196,16 @@
       ]
     },
     "freight_by_country": {
+      "US": {
+        "ft20": 10491,
+        "ft40": 13229,
+        "days": 56
+      },
+      "SA": {
+        "ft20": 7596,
+        "ft40": 10137,
+        "days": 33
+      },
       "AE": {
         "ft20": 8700,
         "ft40": 12500,
@@ -210,16 +220,6 @@
         "ft20": 8900,
         "ft40": 11100,
         "days": 49
-      },
-      "US": {
-        "ft20": 10500,
-        "ft40": 13200,
-        "days": 42
-      },
-      "SA": {
-        "ft20": 9700,
-        "ft40": 13800,
-        "days": 34
       },
       "DE": {
         "ft20": 3400,
@@ -291,7 +291,7 @@
       {
         "port": "Kribi",
         "country": "Cameroon",
-        "days": 45
+        "days": 40
       },
       {
         "port": "Montreal",
@@ -351,7 +351,7 @@
       {
         "port": "Caucedo",
         "country": "Dominican Republic",
-        "days": 51
+        "days": 48
       },
       {
         "port": "Alexandria",
@@ -381,7 +381,7 @@
       {
         "port": "Suva",
         "country": "Fiji",
-        "days": 50
+        "days": 67
       },
       {
         "port": "Le Havre",
@@ -421,7 +421,7 @@
       {
         "port": "Hong Kong",
         "country": "Hong Kong",
-        "days": 10
+        "days": 13
       },
       {
         "port": "Chennai",
@@ -496,7 +496,7 @@
       {
         "port": "Tokyo",
         "country": "Japan",
-        "days": 14
+        "days": 19
       },
       {
         "port": "Aqaba",
@@ -511,7 +511,7 @@
       {
         "port": "Busan",
         "country": "Korea",
-        "days": 10
+        "days": 20
       },
       {
         "port": "Incheon",
@@ -661,7 +661,7 @@
       {
         "port": "Constanta",
         "country": "Romania",
-        "days": 44
+        "days": 30
       },
       {
         "port": "Novorossiysk",
@@ -697,6 +697,11 @@
         "port": "Jeddah",
         "country": "Saudi Arabia",
         "days": 32
+      },
+      {
+        "port": "ad dammam",
+        "country": "Saudi Arabia",
+        "days": 33
       },
       {
         "port": "Dakar",
@@ -844,9 +849,14 @@
         "days": 57
       },
       {
+        "port": "tampa",
+        "country": "United States (USA)",
+        "days": 56
+      },
+      {
         "port": "Puerto Cabello",
         "country": "Venezuela",
-        "days": 55
+        "days": 54
       },
       {
         "port": "Aden",
