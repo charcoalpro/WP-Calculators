@@ -1,9 +1,9 @@
-/*! CCX ccx-app.js — external widget bundle. Generated 2026-10-18T10:01:40.769Z. Do NOT hand-edit. */
+/*! CCX ccx-app.js — external widget bundle. Generated 2026-10-19T11:26:02.383Z. Do NOT hand-edit. */
 /* ---- config.js ---- */
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-10-18T10:01:40.582Z
+ *  Generated:   2026-10-19T11:26:02.230Z
  */
 (function (root, factory) {
   var cfg = factory();
@@ -154,7 +154,7 @@
       "inland_per_container": 300
     },
     "freight_per_container": {
-      "SRG-LAX": 10491,
+      "SRG-LAX": 6922,
       "SRG-NYC": 5500,
       "SRG-HAM": 3400,
       "SRG-FXT": 4000,
@@ -165,8 +165,8 @@
     },
     "transit_days": {
       "SRG-LAX": [
-        56,
-        56
+        38,
+        38
       ],
       "SRG-NYC": [
         30,
@@ -199,9 +199,9 @@
     },
     "freight_by_country": {
       "US": {
-        "ft20": 10491,
-        "ft40": 13229,
-        "days": 56
+        "ft20": 6922,
+        "ft40": 8672,
+        "days": 38
       },
       "SA": {
         "ft20": 7596,
@@ -533,7 +533,7 @@
       {
         "port": "Apapa",
         "country": "Lagos",
-        "days": 60
+        "days": 44
       },
       {
         "port": "Beirut",
@@ -849,6 +849,11 @@
         "port": "Tanpa Bay",
         "country": "United States (USA)",
         "days": 57
+      },
+      {
+        "port": "los angeles",
+        "country": "United States (USA)",
+        "days": 38
       },
       {
         "port": "tampa",
