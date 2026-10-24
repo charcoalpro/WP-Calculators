@@ -1,9 +1,9 @@
-/*! CCX ccx-app.js — external widget bundle. Generated 2026-10-20T10:32:32.575Z. Do NOT hand-edit. */
+/*! CCX ccx-app.js — external widget bundle. Generated 2026-10-24T09:56:00.063Z. Do NOT hand-edit. */
 /* ---- config.js ---- */
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-10-20T10:32:32.446Z
+ *  Generated:   2026-10-24T09:55:59.911Z
  */
 (function (root, factory) {
   var cfg = factory();
@@ -158,7 +158,7 @@
       "SRG-NYC": 5500,
       "SRG-HAM": 3400,
       "SRG-FXT": 4000,
-      "SRG-JEA": 8700,
+      "SRG-JEA": 8500,
       "SRG-JED": 7596,
       "SRG-NSA": 4720,
       "SRG-MER": 5200
@@ -181,8 +181,8 @@
         32
       ],
       "SRG-JEA": [
-        35,
-        35
+        20,
+        20
       ],
       "SRG-JED": [
         33,
@@ -198,6 +198,11 @@
       ]
     },
     "freight_by_country": {
+      "AE": {
+        "ft20": 8500,
+        "ft40": 12100,
+        "days": 20
+      },
       "US": {
         "ft20": 6922,
         "ft40": 8672,
@@ -207,11 +212,6 @@
         "ft20": 7596,
         "ft40": 10137,
         "days": 33
-      },
-      "AE": {
-        "ft20": 8700,
-        "ft40": 12500,
-        "days": 35
       },
       "AU": {
         "ft20": 3150,
@@ -553,7 +553,7 @@
       {
         "port": "Tripoli",
         "country": "Libya",
-        "days": 55
+        "days": 49
       },
       {
         "port": "Klaipeda",
@@ -784,6 +784,11 @@
         "port": "Jebel Ali",
         "country": "United Arab Emirates (UAE)",
         "days": 35
+      },
+      {
+        "port": "Khorfakkan (Sarjah)",
+        "country": "United Arab Emirates (UAE)",
+        "days": 20
       },
       {
         "port": "Felixstowe",
