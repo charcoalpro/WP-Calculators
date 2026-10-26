@@ -1,9 +1,9 @@
-/*! CCX ccx-app.js — external widget bundle. Generated 2026-10-25T10:18:07.153Z. Do NOT hand-edit. */
+/*! CCX ccx-app.js — external widget bundle. Generated 2026-10-26T11:44:08.688Z. Do NOT hand-edit. */
 /* ---- config.js ---- */
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-10-25T10:18:07.018Z
+ *  Generated:   2026-10-26T11:44:08.564Z
  */
 (function (root, factory) {
   var cfg = factory();
@@ -157,7 +157,7 @@
       "SRG-LAX": 6922,
       "SRG-NYC": 5500,
       "SRG-HAM": 3400,
-      "SRG-FXT": 4000,
+      "SRG-FXT": 3395,
       "SRG-JEA": 8500,
       "SRG-JED": 7596,
       "SRG-NSA": 4720,
@@ -177,8 +177,8 @@
         39
       ],
       "SRG-FXT": [
-        32,
-        32
+        35,
+        35
       ],
       "SRG-JEA": [
         20,
@@ -198,6 +198,11 @@
       ]
     },
     "freight_by_country": {
+      "UK": {
+        "ft20": 3395,
+        "ft40": 5101,
+        "days": 35
+      },
       "AE": {
         "ft20": 8500,
         "ft40": 12100,
@@ -227,11 +232,6 @@
         "ft20": 3400,
         "ft40": 5000,
         "days": 39
-      },
-      "UK": {
-        "ft20": 4000,
-        "ft40": 5600,
-        "days": 32
       },
       "IN": {
         "ft20": 4720,
@@ -814,6 +814,11 @@
         "port": "Southampton",
         "country": "United Kingdom (UK)",
         "days": 36
+      },
+      {
+        "port": "liverpool",
+        "country": "United Kingdom (UK)",
+        "days": 35
       },
       {
         "port": "Houston",
