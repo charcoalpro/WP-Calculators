@@ -1,7 +1,7 @@
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-10-28T11:45:48.852Z
+ *  Generated:   2026-10-29T11:53:33.654Z
  */
 (function (root, factory) {
   var cfg = factory();
@@ -163,8 +163,8 @@
     },
     "transit_days": {
       "SRG-LAX": [
-        38,
-        38
+        39,
+        39
       ],
       "SRG-NYC": [
         30,
@@ -196,6 +196,11 @@
       ]
     },
     "freight_by_country": {
+      "US": {
+        "ft20": 6922,
+        "ft40": 8672,
+        "days": 39
+      },
       "UK": {
         "ft20": 3395,
         "ft40": 5101,
@@ -205,11 +210,6 @@
         "ft20": 8500,
         "ft40": 12100,
         "days": 20
-      },
-      "US": {
-        "ft20": 6922,
-        "ft40": 8672,
-        "days": 38
       },
       "SA": {
         "ft20": 7596,
@@ -771,7 +771,7 @@
       {
         "port": "Port of Long Beach (USA)",
         "country": "USA",
-        "days": 41
+        "days": 39
       },
       {
         "port": "Fujairah",
