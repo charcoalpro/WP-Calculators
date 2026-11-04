@@ -1,9 +1,9 @@
-/*! CCX ccx-app.js — external widget bundle. Generated 2026-11-03T13:09:11.375Z. Do NOT hand-edit. */
+/*! CCX ccx-app.js — external widget bundle. Generated 2026-11-04T13:24:33.061Z. Do NOT hand-edit. */
 /* ---- config.js ---- */
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-11-03T13:09:11.253Z
+ *  Generated:   2026-11-04T13:24:32.882Z
  */
 (function (root, factory) {
   var cfg = factory();
@@ -154,7 +154,7 @@
       "inland_per_container": 300
     },
     "freight_per_container": {
-      "SRG-LAX": 6922,
+      "SRG-LAX": 10486,
       "SRG-NYC": 5500,
       "SRG-HAM": 3400,
       "SRG-FXT": 3395,
@@ -165,8 +165,8 @@
     },
     "transit_days": {
       "SRG-LAX": [
-        39,
-        39
+        67,
+        67
       ],
       "SRG-NYC": [
         30,
@@ -199,9 +199,9 @@
     },
     "freight_by_country": {
       "US": {
-        "ft20": 6922,
-        "ft40": 8672,
-        "days": 39
+        "ft20": 10486,
+        "ft40": 13279,
+        "days": 67
       },
       "UK": {
         "ft20": 3395,
@@ -248,7 +248,7 @@
       {
         "port": "Durres",
         "country": "Albania",
-        "days": 60
+        "days": 45
       },
       {
         "port": "Alger (Algiers)",
@@ -864,6 +864,11 @@
         "port": "los angeles",
         "country": "United States (USA)",
         "days": 38
+      },
+      {
+        "port": "miami",
+        "country": "United States (USA)",
+        "days": 67
       },
       {
         "port": "tampa",
