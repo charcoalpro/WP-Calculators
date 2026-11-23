@@ -1,7 +1,7 @@
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-11-22T13:42:33.742Z
+ *  Generated:   2026-11-23T16:42:48.304Z
  */
 (function (root, factory) {
   var cfg = factory();
@@ -271,7 +271,7 @@
       {
         "port": "Antwerpen",
         "country": "Belgium",
-        "days": 41
+        "days": 32
       },
       {
         "port": "Santos",
