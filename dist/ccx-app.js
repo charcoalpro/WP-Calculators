@@ -1,9 +1,9 @@
-/*! CCX ccx-app.js — external widget bundle. Generated 2026-11-23T16:42:48.460Z. Do NOT hand-edit. */
+/*! CCX ccx-app.js — external widget bundle. Generated 2026-11-24T16:38:29.646Z. Do NOT hand-edit. */
 /* ---- config.js ---- */
 /*! CCX config.js — GENERATED from the admin API at build time. Do NOT hand-edit.
  *  Source of truth: the database behind https://id.charcoal.pro/admin/api/config
  *  Regenerate:  node generator/api-adapter.js --write  &&  node generator/build-static.js
- *  Generated:   2026-11-23T16:42:48.304Z
+ *  Generated:   2026-11-24T16:38:29.454Z
  */
 (function (root, factory) {
   var cfg = factory();
@@ -154,7 +154,7 @@
       "inland_per_container": 300
     },
     "freight_per_container": {
-      "SRG-LAX": 10486,
+      "SRG-LAX": 7241,
       "SRG-NYC": 5500,
       "SRG-HAM": 3400,
       "SRG-FXT": 3395,
@@ -165,8 +165,8 @@
     },
     "transit_days": {
       "SRG-LAX": [
-        67,
-        67
+        35,
+        35
       ],
       "SRG-NYC": [
         30,
@@ -199,9 +199,9 @@
     },
     "freight_by_country": {
       "US": {
-        "ft20": 10486,
-        "ft40": 13279,
-        "days": 67
+        "ft20": 7241,
+        "ft40": 9071,
+        "days": 35
       },
       "UK": {
         "ft20": 3395,
@@ -551,6 +551,11 @@
         "days": 49
       },
       {
+        "port": "misurata",
+        "country": "Libya",
+        "days": 49
+      },
+      {
         "port": "Klaipeda",
         "country": "Lithuania",
         "days": 43
@@ -774,6 +779,11 @@
         "port": "Port of Long Beach (USA)",
         "country": "USA",
         "days": 39
+      },
+      {
+        "port": "seattle",
+        "country": "USA",
+        "days": 35
       },
       {
         "port": "Fujairah",
